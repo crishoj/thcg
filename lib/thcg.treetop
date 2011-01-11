@@ -1,0 +1,63 @@
+grammar THCG
+
+  rule treebank
+    sentence (eol sentence)* (eol / ' ')* <Treebank>
+  end
+
+  rule sentence 
+    tokenized eol bracketed <Sentence>
+  end
+
+  rule tokenized
+    token rest:(separator token)* separator? ' '* <Tokenized>
+  end
+
+  rule bracketed
+    [\t ]+ syntactic_type [\t ]+ tree_node ' '* <Bracketed>
+  end
+
+  rule eol
+    "\r"? "\n"
+  end
+
+  rule separator
+    "|"
+  end
+
+  rule token 
+    char+ <Token>
+  end
+
+  rule char
+    [^|\[\]\r\n]
+  end
+
+  rule primitive_type 
+    [a-z]+ <PrimitiveType>
+  end
+
+  rule syntactic_type
+    yielding:nested_type argument* <SyntacticType>
+  end
+
+  rule argument
+    slash dir:dependency_direction? type:nested_type <Argument>
+  end
+
+  rule dependency_direction
+    [<>] <DependencyDirection>
+  end
+
+  rule slash
+    [/\\] <Slash>
+  end
+
+  rule nested_type
+    primitive_type / "(" syntactic_type ")" <NestedType>
+  end
+
+  rule tree_node 
+    syntactic_type ( "[" token "]" / "(" tree_node (" "+ tree_node)* ")") <TreeNode> 
+  end
+
+end

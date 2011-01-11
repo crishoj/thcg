@@ -1,0 +1,8 @@
+Method for deriving (minimally labeled) dependency trees from the Thai CG Bank 
+(Ruangrajitpakorn & Supnithi 2010), using a lexical dictionary for assigning 
+dependency directions to the CG types associated with the grammatical entities 
+in the CG Bank, falling back on a generic CG->CDG mapping in case of 
+out-of-dictionary words. 
+
+Optionally uses distributional ("brown-") clusters obtained through unsupervised 
+processing of large amounts of (word-segmented) raw text in place of POS tags.
