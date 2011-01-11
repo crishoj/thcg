@@ -23,6 +23,7 @@ s/<s/>np	s/s/np
 s/>np	s/np
 s/>s	s/s
 s/>s/>s	s/s/s
+(s/>s)/>s	(s/s)/s
 s\<np	s\np
 s\<np/>np	s\np/np
 s\<np/>np/>np	s\np/np/np
@@ -37,14 +38,13 @@ s\<np/>ut	s\np/ut
 s\<s	s\s
 s\<s/>s	s\s/s
 s\>s	s\s
-s\>s	s\s
 ws/>s	ws/s
 ut/<np/>ut	ut/np/ut
 X/<X	X/X
 X\>X	X\X
-X\>X	X\X
 X\>X/>X	X\X/X
 (np\>np)/<(np\>np)	(np\np)/(np\np)
+(np\>np)/>np	(np\np)/np
 (np\>np)/<spnum	(np\np)/spnum
 (np\>np)/>(s\<np)	(np\np)/(s\np)
 (np\>np)/>num	(np\np)/num
@@ -59,7 +59,9 @@ X\>X/>X	X\X/X
 (s\<np)/<(s\<np/>np)/>np	(s\np)/(s\np/np)/np
 (s\<np)/>(s\<np)	(s\np)/(s\np)
 (s\<np)\<(s\<np)/>(s\<np)	(s\np)\(s\np)/(s\np)
+(s\<np)\<(s\<np)/>(s\<np)	((s\np)\(s\np))/(s\np)
 (s\<np)\>(s\<np)	(s\np)\(s\np)
+(s\<np)\>(s\<np)/>np	(s\np)\(s\np)/np
 (s\<np/>np)\<(s\<np/>np)/>(s\<np/>np)	(s\np/np)\(s\np/np)/(s\np/np)
 (s\<np/>pp)\>(s\<np/>pp)	(s\np/pp)\(s\np/pp)
 (s\<np/>ws)\>(s\<np/>ws)	(s\np/ws)\(s\np/ws)
@@ -67,6 +69,7 @@ X\>X/>X	X\X/X
 np/>(np\>np)	np/(np\np)
 np/>(s\<np)	np/(s\np)
 pp/>(s\<np)	pp/(s\np)
+(s\<np)/>(np\>np)	(s\np)/(np\np)
 s/<(s\<np)	s/(s\np)
 s/<(s\<np)/>(s\<np)	s/(s\np)/(s\np)
 s/<(s\<np)/>np	s/(s\np)/np
@@ -80,6 +83,7 @@ s\<np/>(s\<np)	s\np/(s\np)
 s\>(s\<np)	s\(s\np)
 ws/>(s\<np)	ws/(s\np)
 s\<(s\<np)	s\(s\np)
+(s\s)/>s	(s\s)/s
 ((s\<np)\>(s\<np))/<((s\<np)\>(s\<np))	((s\np)\(s\np))/((s\np)\(s\np))
 ((s\<np)\>(s\<np))/<spnum	((s\np)\(s\np))/spnum
 ((s\<np)\>(s\<np))/>(np\>np)	((s\np)\(s\np))/(np\np)
