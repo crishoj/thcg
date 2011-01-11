@@ -1,0 +1,15 @@
+การ	np/>(s\<np)
+ความ	np/>(s\<np)
+ผู้	np/>(s\<np)
+ผู้ที่	np/>(s\<np)
+ชาว	np/>(s\<np)
+นัก	np/>(s\<np)
+เครื่อง	np/>(s\<np)
+อย่าง	((s\<np)\>(s\<np))/>(np\>np),((s\<np/>pp)\>(s\<np/>pp))/>(np\>np),((s\<np/>ws)\>(s\<np/>ws))/>(np\>np),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))/>(np\>np)
+โดย	((s\<np)\>(s\<np))/>(np\>np),((s\<np/>pp)\>(s\<np/>pp))/>(np\>np),((s\<np/>ws)\>(s\<np/>ws))/>(np\>np),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))/>(np\>np)
+ด้วย	((s\<np)\>(s\<np))/>(np\>np),((s\<np/>pp)\>(s\<np/>pp))/>(np\>np),((s\<np/>ws)\>(s\<np/>ws))/>(np\>np),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))/>(np\>np)
+เป็น	((s\<np)\>(s\<np))/>(np\>np),((s\<np/>pp)\>(s\<np/>pp))/>(np\>np),((s\<np/>ws)\>(s\<np/>ws))/>(np\>np),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))/>(np\>np)
+น่า	(np\>np)/>(s\<np),(s\<np)/>(s\<np)
+ที่	(np\>np)/>(s\<np),(np\>np)/>num,(np\>np)/>s
+ซึ่ง	(np\>np)/>(s\<np),(np\>np)/>num,(np\>np)/>s
+อัน	(np\>np)/>(s\<np),(np\>np)/>num,(np\>np)/>s
