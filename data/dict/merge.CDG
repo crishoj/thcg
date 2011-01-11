@@ -4698,7 +4698,7 @@ space	ut,ut/<np/>ut,ut/<s/>ut,ut/<(s\<np)/>ut,x/<x,x\>x,x\>x/>x,ws/<np/>ut,ws/<s
 เครื่องดำน้ำ	np
 สมุดโผจีน	np
 อิหร่าน	np
-คอย	s\<np/>pp,s\<np/>np,s\<np,s\<np/>pp/>np
+คอย	s\<np/>pp,s\<np/>np,s\<np,s\<np/>pp/>np,(s\<np)/<(s\<np)
 สไบ	np
 คำแสดงความยินดี	np
 ซองขาว	np
@@ -8257,7 +8257,7 @@ space	ut,ut/<np/>ut,ut/<s/>ut,ut/<(s\<np)/>ut,x/<x,x\>x,x\>x/>x,ws/<np/>ut,ws/<s
 ตม	np
 จาง	(np\>np/>pp)\>(np\>np/>pp),np\>np/>pp,s\<np/>pp,(np\>np)\>(np\>np),s\<np,np\>np,(s\<np)\>(s\<np),(s\<np/>ws/>pp)\>(s\<np/>ws/>pp),(s\<np/>pp)\>(s\<np/>pp),(s\<np/>ws)\>(s\<np/>ws),((s\<np)\>(s\<np))\>((s\<np)\>(s\<np)),((s\<np/>ws)\>(s\<np/>ws))\>((s\<np/>ws)\>(s\<np/>ws)),((s\<np/>pp)\>(s\<np/>pp))\>((s\<np/>pp)\>(s\<np/>pp)),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))\>((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))
 ตอ	np
-จาก	np,s/<(s\<np)/>np,s/<s/>np,pp/>(s\<np),pp/>np,pp/>s,s\<np/>pp,s\<np/>np,s\<np,s\<np/>pp/>np
+จาก	np,s/<(s\<np)/>np,s/<s/>np,pp/>(s\<np),pp/>np,pp/>s,s\<np/>pp,s\<np/>np,s\<np,s\<np/>pp/>np,np\>np/>np
 เพื่อน	np
 หอมเทียม	np
 น้ำขาว	np
@@ -8431,7 +8431,7 @@ space	ut,ut/<np/>ut,ut/<s/>ut,ut/<(s\<np)/>ut,x/<x,x\>x,x\>x/>x,ws/<np/>ut,ws/<s
 จะเข็บ	np
 ฝาละมี	np
 ลายปั้นปูน	np
-ค่อยๆ	(np\>np/>pp)\>(np\>np/>pp),np\>np/>pp,s\<np/>pp,(np\>np)\>(np\>np),s\<np,(s\<np)\>(s\<np),(s\<np/>ws/>pp)\>(s\<np/>ws/>pp),(s\<np/>ws)\>(s\<np/>ws),(s\<np/>pp)\>(s\<np/>pp),np\>np,((s\<np)\>(s\<np))\>((s\<np)\>(s\<np)),((s\<np/>ws)\>(s\<np/>ws))\>((s\<np/>ws)\>(s\<np/>ws)),((s\<np/>pp)\>(s\<np/>pp))\>((s\<np/>pp)\>(s\<np/>pp)),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))\>((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))
+ค่อยๆ	(np\>np/>pp)\>(np\>np/>pp),np\>np/>pp,s\<np/>pp,(np\>np)\>(np\>np),s\<np,(s\<np)\>(s\<np),(s\<np/>ws/>pp)\>(s\<np/>ws/>pp),(s\<np/>ws)\>(s\<np/>ws),(s\<np/>pp)\>(s\<np/>pp),np\>np,((s\<np)\>(s\<np))\>((s\<np)\>(s\<np)),((s\<np/>ws)\>(s\<np/>ws))\>((s\<np/>ws)\>(s\<np/>ws)),((s\<np/>pp)\>(s\<np/>pp))\>((s\<np/>pp)\>(s\<np/>pp)),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))\>((s\<np/>ws/>pp)\>(s\<np/>ws/>pp)),(s\<np)/<(s\<np)
 นกแซงแซวหางบ่วงใหญ่	np
 กระโดดสูง	np
 สามเหลี่ยมด้านไม่เท่า	np
@@ -25203,7 +25203,7 @@ NSTDA	np
 ชายน้ำ	np
 มัศยา	np
 ข้อรังเกียจ	np
-เป็น	np\>np,(s\<np)\>(s\<np),(s\<np/>ws/>pp)\>(s\<np/>ws/>pp),(s\<np/>pp)\>(s\<np/>pp),((s\<np/>pp)\>(s\<np/>pp))/>(np\>np),((s\<np)\>(s\<np))\>((s\<np)\>(s\<np)),((s\<np/>ws)\>(s\<np/>ws))\>((s\<np/>ws)\>(s\<np/>ws)),((s\<np/>pp)\>(s\<np/>pp))\>((s\<np/>pp)\>(s\<np/>pp)),((s\<np/>ws)\>(s\<np/>ws))/>(np\>np),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))/>(np\>np),(np\>np/>pp)\>(np\>np/>pp),np\>np/>pp,s\<np/>pp,(np\>np)\>(np\>np),s\<np,s\<np/>pp/>np,(s\<np/>ws)\>(s\<np/>ws),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))\>((s\<np/>ws/>pp)\>(s\<np/>ws/>pp)),s\<np/>np,((s\<np)\>(s\<np))/>(np\>np)
+เป็น	np\>np,(s\<np)\>(s\<np),(s\<np/>ws/>pp)\>(s\<np/>ws/>pp),(s\<np/>pp)\>(s\<np/>pp),((s\<np/>pp)\>(s\<np/>pp))/>(np\>np),((s\<np)\>(s\<np))\>((s\<np)\>(s\<np)),((s\<np/>ws)\>(s\<np/>ws))\>((s\<np/>ws)\>(s\<np/>ws)),((s\<np/>pp)\>(s\<np/>pp))\>((s\<np/>pp)\>(s\<np/>pp)),((s\<np/>ws)\>(s\<np/>ws))/>(np\>np),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))/>(np\>np),(np\>np/>pp)\>(np\>np/>pp),np\>np/>pp,s\<np/>pp,(np\>np)\>(np\>np),s\<np,s\<np/>pp/>np,(s\<np/>ws)\>(s\<np/>ws),((s\<np/>ws/>pp)\>(s\<np/>ws/>pp))\>((s\<np/>ws/>pp)\>(s\<np/>ws/>pp)),s\<np/>np,((s\<np)\>(s\<np))/>(np\>np),np\>np/>np
 นฤหริ	np
 เป็ด	np
 ผึ้ง	np
@@ -32335,7 +32335,7 @@ NSTDA	np
 ไข่เยี่ยวม้า	np
 ชาวสเปน	np
 เธียร	np
-พรุ่งนี้	np
+พรุ่งนี้	np,s\>s
 บทท่องจำ	np
 เรื่องโจษจัน	np
 รถขนของ	np
