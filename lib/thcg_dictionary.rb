@@ -40,6 +40,9 @@ module THCG
     def lookup(form, cg)
       @map[form][cg] if @map[form]
     end
+    def lookup_cdgs(form)
+      @cdgs[form]
+    end
   end
   
 end

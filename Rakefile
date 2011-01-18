@@ -1,45 +1,16 @@
-# 
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
- 
-
+# coding: UTF-8
+$:.unshift 'lib'
+require 'thcg'
 require 'rubygems'
 require 'rake'
-require 'rake/clean'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
-require 'rake/testtask'
+require 'echoe'
 
-spec = Gem::Specification.new do |s|
-  s.name = 'thcbg'
-  s.version = '0.0.1'
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README', 'LICENSE']
-  s.summary = 'Your summary here'
-  s.description = s.summary
-  s.author = ''
-  s.email = ''
-  # s.executables = ['your_executable_here']
-  s.files = %w(LICENSE README Rakefile) + Dir.glob("{bin,lib,spec}/**/*")
-  s.require_path = "lib"
-  s.bindir = "bin"
-end
-
-Rake::GemPackageTask.new(spec) do |p|
-  p.gem_spec = spec
-  p.need_tar = true
-  p.need_zip = true
-end
-
-Rake::RDocTask.new do |rdoc|
-  files =['README', 'LICENSE', 'lib/**/*.rb']
-  rdoc.rdoc_files.add(files)
-  rdoc.main = "README" # page to start on
-  rdoc.title = "thcbg Docs"
-  rdoc.rdoc_dir = 'doc/rdoc' # rdoc output folder
-  rdoc.options << '--line-numbers'
-end
-
-Rake::TestTask.new do |t|
-  t.test_files = FileList['test/**/*.rb']
+Echoe.new 'thcg2dep', THCG::VERSION do |gem|
+  gem.url = "http://github.com/crishoj/thcg2dep"
+  gem.summary = "Derive (minimally labeled) dependency trees from the Thai CG Bank"
+  gem.email = "crjensen@hum.ku.dk"
+  gem.author = "Christian Rishøj"
+  gem.runtime_dependencies << 'commander'
+  gem.development_dependencies << 'rspec'
+  gem.ignore_pattern = ['nbproject/**/*', 'data/**/*']
 end
