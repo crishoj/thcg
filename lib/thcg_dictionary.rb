@@ -1,3 +1,4 @@
+# coding: UTF-8
 
 class Array
   def sum
@@ -50,4 +51,5 @@ end
 if __FILE__ == $PROGRAM_NAME
 	d = THCG::Dictionary.new ARGV[0]
 #  puts d.lookup_by_cg("พบ", "s\np/np")
+  puts d.lookup_cdgs("พบ")
 end
