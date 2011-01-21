@@ -16,6 +16,8 @@ A recent ruby interpreter is required, as well as the following ruby packages:
 
 == Usage
 
+=== Treebank conversion
+
 To extract dependency trees from a CG treebank, use the following command:
 
  % ruby lib/thcg_converter.rb data/dict/merge.CDG data/map/CDG-CG.txt data/cg/sample.txt > data/conll/sample.conll
@@ -55,4 +57,42 @@ Sample output:
     No mapping of ((s\np)\(s\np))/np for 'ใน' - falling back on CD->CDG map
     No mapping of (np\np)\(np\np) for 'ๆ' - falling back on CD->CDG map
     done
+
+Please note that CG types remain in the resulting CONLL file. These should be
+stripped out before using the dependency treebank for any experiments or real
+application, as the CG types cannot reliably be obtained automatically for 
+unseen text.
+
+
+=== Word cluster augmentation
+
+To add unsupervised Brown clusters to a dependency treebank, use the command:
+
+ % ruby lib/cluster_path_map.rb data/conll/sample.conll data/paths/best-all-spaces-c32-p1.out/paths > data/conll/sample-c32.conll
+
+Explanation:
+
+ * data/conll/sample.conll      - input dependency treebank
+ * data/paths/best-all-spaces-c32-p1.out/paths  - output file from the wcluster utility (http://www.cs.berkeley.edu/~pliang/software/brown-cluster-1.2.zip)
+ * data/conll/sample-c32.conll  - output file for augmented treebank
+
+A second paths file may be specified, to include clusters of different 
+granularity as a second POS tag.
+
+
+=== Dependency parser training
+
+To train a dependency parser, the output from the above steps should first
+be stripped of the CG types, shuffled (to compensate for clustering of similar
+sentence types) and then split in e.g. a 9-1 ratio for training and testing.
+
+Given a train part and a test part, the standard MaltParser may be trained and
+tested as follows:
+
+ % java -jar ~/Tools/malt-1.4.1/malt.jar -c malt_test -i data/train.conll -m learn
+ % java -jar ~/Tools/malt-1.4.1/malt.jar -c malt_test -i data/test.conll -o malt_test.out.conll -m parse
+ % eval07.pl -q -g data/test.conll -s malt_test.out.conll
+
+eval07.pl is the standard evaluation script for the task, available for download
+at e.g. http://nextens.uvt.nl/depparse-wiki/SoftwarePage#eval07.pl
 
