@@ -1,8 +1,58 @@
-Method for deriving (minimally labeled) dependency trees from the Thai CG Bank 
-(Ruangrajitpakorn & Supnithi 2010), using a lexical dictionary for assigning 
-dependency directions to the CG types associated with the grammatical entities 
-in the CG Bank, falling back on a generic CG->CDG mapping in case of 
-out-of-dictionary words. 
+THCG2DEP is an implementation of a method for deriving (minimally labeled) 
+dependency trees from the Thai CG Bank (Ruangrajitpakorn & Supnithi 2010), 
+using a lexical dictionary for assigning dependency directions to the CG types 
+associated with the grammatical entities in the CG Bank, with fallback to a 
+generic CG->CDG mapping in case of out-of-dictionary words.
 
 Optionally uses distributional ("brown-") clusters obtained through unsupervised 
 processing of large amounts of (word-segmented) raw text in place of POS tags.
+
+== Requirements
+
+A recent ruby interpreter is required, as well as the following ruby packages:
+
+ * commander (for command-line interface)
+ * conll (for generating dependency treebank files)
+
+== Usage
+
+To extract dependency trees from a CG treebank, use the following command:
+
+ % ruby lib/thcg_converter.rb data/dict/merge.CDG data/map/CDG-CG.txt data/cg/sample.txt > data/conll/sample.conll
+
+Explanation:
+
+ * data/dict/merge.CDG      - merged CDG lexical dictionary 
+ * data/map/CDG-CG.txt      - generic CG->CDG mapping
+ * data/cg/sample.txt       - source CG bank
+ * data/conll/sample.conll  - target file for dependency treebank (CONLL format)
+
+Sample output:
+
+    Dictionary file: data/dict/merge.CDG
+    Building dictionary from data/dict/merge.CDG
+    38250 forms, 2 CDGS/form on average
+    Building CG->CDG map
+    Ambiguous CG->CDG mapping for น่า: (s\np)/(s\np) could be either (s\<np)/>(s\<np) or (s\<np)/<(s\<np)
+    Ambiguous CG->CDG mapping for ตอนนั้น: s/s could be either s/>s or s/<s
+    Ambiguous CG->CDG mapping for กับ: np\np/np could be either np\<np/>np or np\>np/>np
+    Ambiguous CG->CDG mapping for ตอนนี้: s/s could be either s/>s or s/<s
+    Ambiguous CG->CDG mapping for ขณะนี้: s/s could be either s/>s or s/<s
+    Ambiguous CG->CDG mapping for ขณะนั้น: s/s could be either s/>s or s/<s
+    Map file: data/map/CDG-CG.txt
+    Ambiguous CG->CDG mapping: np\np/np could be either np\>np/>np or np\<np/>np
+    Ambiguous CG->CDG mapping: s/s could be either s/>s or s/<s
+    Ambiguous CG->CDG mapping: s\s could be either s\>s or s\<s
+    Ambiguous CG->CDG mapping: (s\np)/(s\np) could be either (s\<np)/>(s\<np) or (s\<np)/<(s\<np)
+    Ambiguous CG->CDG mapping: s/(s\np) could be either s/>(s\<np) or s/<(s\<np)
+    Ambiguous CG->CDG mapping: s/(s\np)/np could be either s/>(s\<np)/>np or s/<(s\<np)/>np
+    Ambiguous CG->CDG mapping: s\(s\np) could be either s\<(s\<np) or s\>(s\<np)
+    90 CG->CDG mapping(s)
+    Treebank file: data/cg/sample.txt
+    Parsing 10 lines...
+    done
+    Processing 5 sentences...
+    No mapping of ((s\np)\(s\np))/np for 'ใน' - falling back on CD->CDG map
+    No mapping of (np\np)\(np\np) for 'ๆ' - falling back on CD->CDG map
+    done
+
