@@ -10,14 +10,19 @@ module THCG
     @@parser = THCGParser.new
   
     def self.parse(data)
-      tree = @@parser.parse(data)
-      raise Exception, "Parse error: #{@@parser.failure_reason}" if tree.nil?
-      self.clean_tree(tree)
-      tree
+      parse_from(data, 'treebank')
     end  
     
     def self.parse_syntactic_type(data)
-      tree = @@parser.parse(data, :root => 'syntactic_type')
+      parse_from(data, 'syntactic_type')
+    end
+    
+    def self.parse_bracketed(data)
+      parse_from(data, 'bracketed')
+    end
+    
+    def self.parse_from(data, root) 
+      tree = @@parser.parse(data, :root => root)
       raise Exception, "Parse error: #{@@parser.failure_reason}" if tree.nil?
       self.clean_tree(tree)
       tree

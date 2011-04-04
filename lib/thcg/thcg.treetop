@@ -5,7 +5,7 @@ grammar THCG
   end
 
   rule sentence 
-    tokenized eol bracketed <Sentence>
+    tokenized (eol bracketed)* <Sentence>
   end
 
   rule tokenized
@@ -57,7 +57,15 @@ grammar THCG
   end
 
   rule tree_node 
-    syntactic_type ( "[" token "]" / "(" tree_node (" "+ tree_node)* ")") <TreeNode> 
+    syntactic_type ( "[" token "]" / scope_open tree_node (" "+ tree_node)* scope_close ) <TreeNode> 
+  end
+
+  rule scope_open
+    "{" / "("
+  end
+
+  rule scope_close
+    "}" / ")"
   end
 
 end

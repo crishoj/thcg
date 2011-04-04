@@ -1,3 +1,4 @@
+require 'conll'
 
 module THCG
   
@@ -30,20 +31,25 @@ module THCG
     def root
       elements.find { |e| e.kind_of? TreeNode }
     end
-    def to_dependencies(converter)
+    def to_dependencies(converter, cdg_as_pos = true)
       terminals.each_with_index do |t, j|
         t.id = j+1
       end
       heads = converter.cdg2dep(root)
       root_count = 0
       raise "Multiple roots" if root_count > 1
-      terminals.collect { |t|
-        head_id = converter.heads[t.id] || 0
-        deprel  = converter.deprels[t.id] || '_'
-        root_count += 1 if head_id == 0        
-        fields = [t.id, t.token, '_', t.type, '_', '_', head_id, deprel, '_', '_']
-        fields.collect { |f| f.to_s.gsub(/\s/, '_') }.join("\t")
-      }.join("\n") + "\n"      
+      Conll::Sentence.new do |sent|
+        terminals.each do |t|
+          head_id = converter.heads[t.id] || 0
+          deprel  = converter.deprels[t.id] || '_'
+          root_count += 1 if head_id == 0
+          sent << Conll::Token.new { |tok| 
+            tok.id, tok.form = t.id, t.token
+            tok.pos = t.type if cdg_as_pos
+            tok.head_id, tok.deprel = head_id, deprel
+          }
+        end
+      end
     end
     def to_s
       root.to_s(true)
@@ -141,7 +147,7 @@ module THCG
         converter.register_head(children.last, children.first, :serial)
       end
       type.arguments.reverse.each do |arg|        
-        puts "  [ARG] #{arg}" if $VERBOSE
+        puts "  [ARG] #{arg} of #{type}" if $VERBOSE
         sibling = arg.from == :right ? right_siblings.first : left_siblings.last
         unless sibling
           puts "[NOSIB]" if $VERBOSE
