@@ -1,0 +1,44 @@
+
+grammar NaistTreebank
+
+  rule treebank
+    sentence (newline+ sentence)*
+  end
+
+  rule raw
+    [^|\n]+
+  end
+
+  rule segmented
+    raw ( '|' raw)*
+  end
+
+  rule tree
+    "u'" nodelist "'"
+  end
+
+  rule nodelist
+    [" node (', ' node)* "]
+  end
+
+  rule node
+    '{' property+ '}'
+  end
+
+  rule literal
+    '"' value:[^"]+ '"'
+  end
+
+  rule property
+    name:literal ':' ' '* value:( literal / nodelist )
+  end
+
+  rule newline
+    "\r"? "\n"
+  end
+
+  rule sentence
+    raw newline segmented newline tree newline*
+  end
+
+end
