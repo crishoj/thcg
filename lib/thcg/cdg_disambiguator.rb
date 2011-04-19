@@ -2,47 +2,57 @@ base_path = File.expand_path(File.dirname(__FILE__))
 require File.join(base_path, 'cdg_converter.rb')
 require File.join(base_path, 'parser.rb')
 
-module THCG
-  class CDGDisambiguator
-    
-    def initialize
+cdg_file = ARGV.shift  
+dep_file = ARGV.shift
+skip = ARGV.shift.to_i
+
+converter = THCG::CDGConverter.new
+
+cdg_sents = File.new(cdg_file).each("\r\n\r\n")
+dep_sents = File.new(dep_file).each("\n\n")
+
+counters = Hash.new(0)
+
+ambigous   = File.new(cdg_file+'.ambiguous', 'w')
+unambigous = File.new(cdg_file+'.unambiguous', 'w')
+
+begin
+  while (cdg_sent = cdg_sents.next)
+    if skip > 0 and counters[:skips] < skip
+      counters[:skips] += 1
+      dep_sents.next
+      next
     end
     
-  end
-end
-
-
-if __FILE__ == $PROGRAM_NAME
-  cdg_file = ARGV.shift  
-  dep_file = ARGV.shift
-  req_sent_no = ARGV.shift.to_i
-  
-  converter = THCG::CDGConverter.new
-
-  cdg_sents = File.new(cdg_file).each("\r\n\r\n")
-  dep_sents = File.new(dep_file).each("\n\n")
-
-  counters = Hash.new(0)
-  
-  dep_tree = Conll::Sentence.parse(dep_sents.next.split("\n"))
-  while (cdg_sent = cdg_sents.next)
     counters[:sentences] += 1
-    next if req_sent_no > 0 and counters[:sentences] != req_sent_no
-    
     cdg_parses = cdg_sent.chomp.split(/\r?\n/)
     unparsed = cdg_parses.shift
     cdg_forms = unparsed.split('|').compact.collect { |form| form.gsub(/\A"|"\Z/, '') }
 
-    warn "Sentence #{counters[:sentences]}: #{unparsed}, #{cdg_parses.count} CDG parses\n\tCDG forms: #{cdg_forms}\n\tDep forms: #{dep_tree.tokens.forms}"
-    
-    if cdg_forms != dep_tree.tokens.forms
-      warn "Forms mismatch. Skipping (assuming missing dependency tree)"
-      exit 1
+    warn "Sentence #{counters[:sentences]}: #{unparsed}, #{cdg_parses.count} CDG parses"
+
+    dep_tree = nil
+    loop do
+      begin
+        dep_tree = Conll::Sentence.parse(dep_sents.next.split("\n"))
+        break if cdg_forms == dep_tree.tokens.forms
+        warn "\tSkipping: #{dep_tree.tokens.forms} != #{cdg_forms}"
+        counters[:missing] += 1
+      rescue StopIteration
+        warn "No more dependency trees"
+        exit 1
+      end
+    end
+
+    if cdg_parses.count == 0
+      counters[:no_cdgs] += 1
+      warn ""
+      next
     end
     
     target_head_ids = dep_tree.tokens.collect(&:head_id).collect(&:to_i)
     compatible = []
-    warn "Target dependencies:    #{target_head_ids}"
+    warn "\tTarget dependencies: #{target_head_ids}"
     cdg_parses.each do |bracketed|
       begin
         cdg_tree = THCG::Parser.parse_bracketed(bracketed)
@@ -56,15 +66,32 @@ if __FILE__ == $PROGRAM_NAME
         raise e
       end
     end
-    warn "#{compatible.count} compatible CDG parses"
-    if compatible.count > 0
-      counters[:compatible] += 1
-      counters[:ambiguous] += 1 if compatible.count > 1
-    else
+    warn "\t#{compatible.count} compatible CDG parses"
+    if compatible.count == 0
       counters[:incompatible] += 1
+    elsif compatible.count == 1
+      counters[:compatible] += 1
+      counters[:unambiguous] += 1
+      unambigous << unparsed + "\n" + compatible.join("\n") + "\n\n"
+      unambigous.flush
+    else
+      counters[:compatible] += 1
+      counters[:ambiguous] += 1 
+      ambigous << unparsed + "\n" + compatible.join("\n") + "\n\n"
+      ambigous.flush
     end
-    puts compatible.join("\n")
-    warn "Counts: #{counters.inspect}"
-    dep_tree = Conll::Sentence.parse(dep_sents.next.split("\n"))
+    warn ""
+    warn "Counts: #{counters.sort.inspect}\n"
   end
+
+ensure
+  warn <<-eos
+    Out of #{counters[:sentences]} dependency trees,
+     - #{counters[:missing]} are missing from the CDG parser output
+     - #{counters[:no_cdgs]} had 0 CDG parses,
+     - #{counters[:incompatible]} had no CDG parses compatible with the NAIST dependency tree,
+     - #{counters[:compatible] - counters[:ambiguous]} had a single CDG parse compatible with the NAIST dependency tree,
+     - #{counters[:ambiguous]} had two or more CDG parses compatible with the NAIST dependency tree,
+    totaling #{counters[:compatible]} NAIST dependency trees for which one or more CDG trees could be obtained.
+  eos
 end
