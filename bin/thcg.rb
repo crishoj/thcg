@@ -11,13 +11,33 @@ program :description, 'Command to work with Thai CG/CDG treebanks.'
 
 default_command :help
 
+global_option('--dos') { $/ = "\r\n" }
+
 command :sort do |c|
   c.syntax = 'thcg sort'
   c.description = 'Sort sentences in a treebank with multiple CDG parse trees per sentences in increasing order of ambiguity.'
   c.action do |args, options|
     source = args.empty? ? STDIN : File.new(cdg_file)
-    sorted = source.each("\n\n").sort_by { |cdg_sent| cdg_sent.count("\n") }
+    sorted = source.each($/ * 2).sort_by { |cdg_sent| cdg_sent.count("\n") }
     print sorted.join
+  end
+end
+
+command :deduplicate do |c|
+  c.syntax = 'thcg deduplicate'
+  c.description = 'Remove duplicate sentences from a treebank (according to surface form).'
+  c.action do |args, options|
+    seen = Hash.new(0)
+    source = args.empty? ? STDIN : File.new(cdg_file)
+    lines = source.each($/)
+    while line = lines.next
+      cdg_sent = line + lines.next
+      surface = cdg_sent.split($/).first.strip
+      if seen[surface] == 0
+        print cdg_sent 
+      end
+      seen[surface] += 1
+    end
   end
 end
 
@@ -112,3 +132,4 @@ command :disambiguate do |c|
     end
   end
 end
+
