@@ -41,6 +41,51 @@ command :deduplicate do |c|
   end
 end
 
+command :cg2dep do |c|
+  c.syntax = 'thcg cg2dep --dictionary FILE --map FILE [options] TREEBANK_FILE'
+  c.option '--dictionary FILE', 'CDG dictionary'
+  c.option '--map FILE', 'Generic CG->CDG mapping for OOV fallback'
+  c.option '--sent-no N', 'Optionally convert a single sentence'
+  c.description = 'Enrich CG trees with dependency directions and derive dependency trees'
+  c.action do |args, options|
+    require 'thcg/cg_converter'
+
+    dictionary_file = options.dictionary
+    raise "Dictionary file #{dictionary_file} not found" unless dictionary_file and File.readable? dictionary_file
+    warn "Dictionary file: #{dictionary_file}"
+    dictionary = THCG::Dictionary.new(dictionary_file)
+
+    map_file = options.map
+    raise "Map file #{map_file} not found" unless map_file and File.readable? map_file
+    warn "Map file: #{map_file}"
+    map = THCG::Map.from_file(map_file)
+
+    treebank_file = args.first
+    raise "Treebank file #{treebank_file} not found" unless treebank_file and File.readable? treebank_file
+    warn "Treebank file: #{treebank_file}"  
+
+    sent_no = options.sent_no
+    converter = THCG::CGConverter.new(dictionary, map)
+    converter.convert_treebank(File.open(treebank_file).read, sent_no)
+  end
+end
+
+command :cdg2dep do |c|
+  c.syntax = 'thcg cdg2dep [options] TREEBANK'
+  c.description = 'Derive dependency trees from CDG trees'
+  c.option '--sent-no N', 'Optionally convert a single sentence'
+  c.action do |args, options|
+    require 'thcg/cdg_converter'
+
+    treebank_file = args.first
+    raise "Treebank file #{treebank_file} not found" unless treebank_file and File.readable? treebank_file
+    warn "Treebank file: #{treebank_file}"  
+
+    converter = THCG::CDGConverter.new
+    converter.convert_treebank(File.open(treebank_file).read, sent_no)
+  end
+end
+
 command :disambiguate do |c|
   c.syntax = 'thcg disambiguate CDG_PARSES CONLL_FILE'
   c.description = 'Filter CDG parse trees, leaving only those with derived dependency trees consistent with reference dependency trees.'
