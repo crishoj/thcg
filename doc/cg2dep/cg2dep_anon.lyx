@@ -1,0 +1,3648 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{IJCNLP2011}
+\end_preamble
+\options multicols
+\use_default_options true
+\begin_modules
+languages
+linguistics
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding utf8-plain
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts true
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command bibtex
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Automatic Transformation of the Thai Categorial Grammar Treebank to Dependency
+ Trees
+\end_layout
+
+\begin_layout Author
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Abstract
+A method for deriving an approximately labeled dependency treebank from
+ the Thai Categorial Grammar Treebank has been implemented.
+ The method involves a lexical dictionary for assigning dependency directions
+ to the CG types associated with the grammatical entities in the CG bank,
+ falling back on a generic CG to CDG mapping in case of unknown words.
+ Currently, just a handful of the trees in the Thai CG bank cannot unambiguously
+ be transformed into directed dependency trees.
+ Derived dependency arcs are optionally labeled with a learned classfier,
+ achieving 
+\begin_inset Formula $\approx75\%$
+\end_inset
+
+ label accuracy on a sample set.
+ In the process, a number of annotation errors in the CG bank were identified
+ and corrected.
+ Although rather limited in its coverage, excluding e.g.
+ long-distance dependencies, topicalisations and longer sentences, the resulting
+ treebank is believed to be sound in terms structural annotational consistence
+ and a valuable complement to the scarce Thai language resources in existence.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Syntactic resources play an essential role for the majority of NLP applications,
+ but for Thai language, openly available syntactic resources are few in
+ number: So far, the only reported resources are the CG treebank 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ruangrajitpakorn2009asyntactic"
+
+\end_inset
+
+ and the NAiST dependency bank 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "wacharamanotham2007thedevelopment,sudprasert2008dependency"
+
+\end_inset
+
+ --- others being either unpublished or minuscule in size.
+ These treebanks were approved manually by linguists, and therefore expectedly
+ reliable in terms of accuracy.
+ However, each resource is fairly limited in size.
+ Rather than relying exclusively on labor-intensive manual annotation for
+ further expanding the resources, it would be economically sound to leverage
+ existing efforts and transform an existing treebank in one grammar into
+ the another.
+\end_layout
+
+\begin_layout Subsection
+Categorial grammar
+\end_layout
+
+\begin_layout Standard
+Categorial grammar (CG) is a lexicalised theory in natural language syntax
+ motivated by the principle of constitutionality and organised according
+ to the syntactic elements 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ajdukiewicz1935diesyntaktische,steedman2000thesyntactic"
+
+\end_inset
+
+, and forms the theoretical basis for the Thai CG treebank.
+ The resource building effort has been very fruitful, but there remains
+ phenomena of Thai languge, including long-range dependencies and topicalisation
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "warotamasikkhadit1997fronting"
+
+\end_inset
+
+, which are unhandled by the instantiation of CG currently in use.
+ 
+\end_layout
+
+\begin_layout Standard
+Additionally, although Thai language belongs to a fixed word order typology,
+ Thai spoken language exhibits some flexibility in word order, due to the
+ occasional preference of Thai language users for correspondance in rhyme.
+ As an example, consider the following sentence
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The Thai adverbialising prefix 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+อย่าง
+\end_layout
+
+\end_inset
+
+ can be likened to the English 
+\begin_inset Quotes eld
+\end_inset
+
+-ly
+\begin_inset Quotes erd
+\end_inset
+
+ suffix, which produces an adverbial form from an adjective.
+ Artificial word boundaries has beeen inserted for clarity.
+\end_layout
+
+\end_inset
+
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "90col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align left
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+อังกฤษ คิดค้น อย่าง หนัก วัคซีนป้องกันเชื้อไวรัสไข้หวัดนก
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+(
+\series bold
+Lit
+\series default
+: England/NE invent/V 
+\begin_inset Quotes eld
+\end_inset
+
+-ly
+\begin_inset Quotes erd
+\end_inset
+
+/ADVPFX heavy/ADJ avian_flu_vaccine/NP)
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+\begin_inset Quotes eld
+\end_inset
+
+The British are strenuously developing an Avian Flu vaccine.
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The adverbial compound formed by 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+อย่าง หนัก
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+strenuously
+\begin_inset Quotes erd
+\end_inset
+
+) conventionally occurs after the direct object, but is in this sentence,
+ it is realised in the pre-direct object position
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+When language users exploit this flexibility in word order to produce aesthetica
+lly pleasing sound patterns, it results in a marked form, but the phenomenon
+ is nonetheless productive, and encountered frequently enough to necessitate
+ handling in NLP applications.
+ 
+\end_layout
+
+\end_inset
+
+ in order for the last syllable of 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+อย่าง หนัก
+\end_layout
+
+\end_inset
+
+ to rhyme with the first syllable of 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+วัคซีน
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+vaccine
+\begin_inset Quotes erd
+\end_inset
+
+).
+ To some degree, this phenomenon from spoken language shines through in
+ written language, especially in the domains of news and recent politics,
+ and is causing a challenge for the employment of CG grammar.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename dep_repr_ambiguity.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Examplar of ambiguity arising only in dependency representation 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "daum2004automatic"
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Examplar-of-ambiguity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dependency representation
+\end_layout
+
+\begin_layout Standard
+In recent years, dependency representation has seen a dramatic increase
+ in interest, likely due to a number of appealing properties of the representati
+on.
+ In comparison to phrase structure grammar, dependency structures provide
+ a relatively direct encoding of predicate-argument structure, which is
+ relevant to subsequent analyses 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "nivre2005dependency"
+
+\end_inset
+
+.
+ Dependency representation is arguably better suited for languages with
+ flexible word order.
+ Additionally, having no non-terminal nodes, dependency structures are often
+ perceived as leaving room for less ambiguity as well as being more computationa
+lly managable.
+\end_layout
+
+\begin_layout Standard
+Certainly, dependency representation has drawbacks of its own in terms of
+ ambiguity, some of which are specific to dependency representation.
+ In particular, Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Examplar-of-ambiguity"
+
+\end_inset
+
+ shows a construction with an unambiguous constituent structure, which in
+ dependency space is ambiguous with respect to the attachment of the adverb
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "daum2004automatic"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Furthermore, dependency structure allows for a number of ways to represent
+ coordinated phrases, some having the 
+\emph on
+coordinating conjunction as head
+\emph default
+ (CCH) of the coordinate structure, and a special dependency label 
+\emph on
+CJT
+\emph default
+ that does not describe the grammatical function of the conjuncts (Figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:CCH"
+
+\end_inset
+
+).
+ Another option is having the 
+\emph on
+coordinating conjunction as dependent
+\emph default
+ (CCD) of one of the conjuncts, thus allowing one conjunct to occur with
+ a dependency label expliciting its grammatical function (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:CCD"
+
+\end_inset
+
+).
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "mcdonald2007characterizing"
+
+\end_inset
+
+ offer a thorough review of these and other candidate analyses in use.
+ Unfortunately, none of the conceivable representations are unproblematic
+ from a linguistic perspective 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "daum2004automatic"
+
+\end_inset
+
+, or offer the same transparency as the coordination rules of CCG do 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "boonkwan2009amemorybased"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename cch.pdf
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+CCH
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:CCH"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ccd.pdf
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+CCD
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:CCD"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Two possible analyses of a coordination 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "kubler2009dependency"
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:coord"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nonetheless, given the availability of generally applicable, trainable dependenc
+y parsers, and reports of beneficial applications of dependency analysis
+ in tasks such as word-alignmeent 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ma2008improving"
+
+\end_inset
+
+ and reordering 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "chang2009discriminative"
+
+\end_inset
+
+ for statistical machine translation, a dependency treebank of good quality
+ is a highly desirable resource.
+\end_layout
+
+\begin_layout Subsection
+Outline
+\end_layout
+
+\begin_layout Standard
+The rest of the paper is organised as follows.
+ In Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Related-work"
+
+\end_inset
+
+ we briefly review other works dealing with similar transformations, before
+ presenting the approach taken in this work in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Methodology"
+
+\end_inset
+
+.
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Experiments"
+
+\end_inset
+
+ describes the experimental setting and results, which are discussed in
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Discussion"
+
+\end_inset
+
+.
+ Finally, Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusion"
+
+\end_inset
+
+ concludes the paper.
+ 
+\end_layout
+
+\begin_layout Section
+Related work
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Related-work"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In preperation for the CoNLL-X shared task on dependency parsing 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "buchholz2006conllxshared"
+
+\end_inset
+
+, a number dependency trees were derived from a number of constituency-based
+ phrase structure treebanks, most of which has grammatical function (e.g.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+subject
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+object
+\begin_inset Quotes erd
+\end_inset
+
+) as part of the annotation.
+ The conversion process for such treebanks would involve a 
+\emph on
+head table
+\emph default
+ with rules of the form 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+the head child of a VP/clause is the child with the HD/predicator/hd/Head
+ function
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+[the dependency label] for a token is the function of the biggest constituent
+ of which this token is the lexical head
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The case of the Thai CG bank is different, as it does not directly contain
+ any grammatical functions.
+ On the other hand, identifying head tokens is relatively straight-forward
+ when augmenting the CG annotation with dependency directions 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ruangrajitpakorn2010acurrent"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand cite
+key "chanev2006dependency"
+
+\end_inset
+
+ faced a similar situation in their transformation of the BulTreeBank to
+ dependency representation.
+ Heads were first identified from explicitly stated rules in a head table.
+ Lacking explicit grammatical functions in the source treebank, they explored
+ a heuristic rule-based approach for the labeling with a 
+\emph on
+dependency table,
+\emph default
+ containing rules based on parent constituents.
+ Although good results are achieved, they report of errors like mistaken
+ subjects and objects.
+ 
+\end_layout
+
+\begin_layout Section
+Methodology
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Methodology"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The situation with the Thai CG bank is a little different.
+ Together with a set of combinatory grammer rules, the CG type tags and
+ bracketing present in the treebank unambigously specify the constituent
+ structure of the treebank sentences.
+ When the CG type tags are augmented with dependency directions, a dependency
+ tree can be derived with relative ease from the CG-based constituents.
+ Grammatical functions, however, are not immediately evident from the CG
+ trees.
+ 
+\end_layout
+
+\begin_layout Standard
+We first describe a relatively straight-forward method for deriving the
+ dependency trees, and next consider the more daunting task of assigning
+ functional labels to the dependency arcs.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Transformation-overview"
+
+\end_inset
+
+ shows a schematical overview of the proprosed method.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename process.pdf
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Transformation overview
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Transformation-overview"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Terminology
+\end_layout
+
+\begin_layout Standard
+For any given CG type 
+\begin_inset Formula $t$
+\end_inset
+
+, we use thethe 
+\emph on
+arity
+\emph default
+ (admittedly a bit sloppily) to denote the ordered list of arguments expected
+ by a type.
+ The arity of the type 
+\begin_inset Formula $\mathtt{s\backslash np/ws/np}$
+\end_inset
+
+ is thus 
+\begin_inset Formula $\mathtt{/np}$
+\end_inset
+
+, 
+\begin_inset Formula $\mathtt{/ws}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathtt{\backslash np}$
+\end_inset
+
+ --- that is, 
+\end_layout
+
+\begin_layout Itemize
+a noun phrase from the right, followed by 
+\end_layout
+
+\begin_layout Itemize
+a subordinate clause beginning with the Thai word 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ว่า
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+that
+\begin_inset Quotes erd
+\end_inset
+
+, subordinate clause marker), and 
+\end_layout
+
+\begin_layout Itemize
+another noun phrase from the left.
+\end_layout
+
+\begin_layout Standard
+Complementary, we define the 
+\emph on
+yield
+\emph default
+ of 
+\begin_inset Formula $t$
+\end_inset
+
+ as the set of possible CG types which may result from functional application
+ of a CG rule.
+ The transitive verb type 
+\begin_inset Formula $\mathtt{s\backslash np/np}$
+\end_inset
+
+, for example, yields
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathtt{s\backslash np}$
+\end_inset
+
+ and 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathtt{s}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+after receiving a 
+\begin_inset Formula $\mathtt{np}$
+\end_inset
+
+ to the right, and another 
+\begin_inset Formula $\mathtt{np}$
+\end_inset
+
+ to the left, respectively.
+ This is simply the basic combinatory CCG rules:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\textrm{X/Y}\;\;\;\textrm{Y} & \Rightarrow & \textrm{X}\\
+\textrm{Y}\;\;\;\textrm{X\textbackslash Y} & \Rightarrow & \textrm{X}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dependency directions
+\end_layout
+
+\begin_layout Standard
+The first transformation step, which can rightly be regarded as a necessary
+ preprocessing step before the actual transformation, involves a lexical
+ dictionary for assigning dependency directions to the CG types associated
+ with the grammatical entities in the CG bank, falling back on a generic
+ CG to CDG mapping in case of unknown words.
+ 
+\end_layout
+
+\begin_layout Standard
+Note that only terminal nodes will have assigned dependency directions assigned
+ by this procedure.
+ Dependency directions are propagated to non-terminal nodes in a bottom-up
+ fashion by the procedure 
+\begin_inset Formula $\mathtt{propagateDirections}$
+\end_inset
+
+ (Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:propagating"
+
+\end_inset
+
+).
+ In identifying which child to adopt dependency directions from, the parent
+ node type is checked against the yield
+\emph on
+ 
+\emph default
+of each child node.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},language=Python"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def propagateDirections(node):
+\end_layout
+
+\begin_layout Plain Layout
+
+  for child in node.children:
+\end_layout
+
+\begin_layout Plain Layout
+
+    propagateDirections(child)
+\end_layout
+
+\begin_layout Plain Layout
+
+  if node.hasDependencyDirection:
+\end_layout
+
+\begin_layout Plain Layout
+
+    return
+\end_layout
+
+\begin_layout Plain Layout
+
+  for child in node.children:
+\end_layout
+
+\begin_layout Plain Layout
+
+    if child.yields(node.type):
+\end_layout
+
+\begin_layout Plain Layout
+
+      node.depDirs = child.depDirs
+\end_layout
+
+\begin_layout Plain Layout
+
+      break
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Pseudo-code for propagating dependency directions to non-terminal nodes.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:propagating"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Head finding
+\end_layout
+
+\begin_layout Standard
+Dependency arcs are assigned by a procedure that implements the CDG dependency
+ derivation rules introduced by 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ruangrajitpakorn2010acurrent"
+
+\end_inset
+
+ (motivated by 
+\begin_inset CommandInset citation
+LatexCommand citealp
+key "collins1999headdriven"
+
+\end_inset
+
+).
+ Let 
+\begin_inset Formula $c:d$
+\end_inset
+
+ signify a CDG type 
+\begin_inset Formula $c$
+\end_inset
+
+ and a dependency structure 
+\begin_inset Formula $d$
+\end_inset
+
+, and the notion 
+\begin_inset Formula $h(\mathrm{d}_{1})\rightarrow h(\mathrm{d}_{2})$
+\end_inset
+
+ represent a dependency arc between 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+the head of 
+\begin_inset Formula $d_{1}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ and 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+the head of 
+\begin_inset Formula $d_{2}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ (with 
+\begin_inset Formula $h(\mathrm{d}_{1})$
+\end_inset
+
+ governing 
+\begin_inset Formula $h(\mathrm{d}_{2})$
+\end_inset
+
+) .
+ Then the derivation rules are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\textrm{X/<Y:d}_{1}\;\;\textrm{Y:d}_{2} & \Rightarrow & h(\mathrm{d}_{1})\leftarrow h(\mathrm{d}_{2})\\
+\textrm{X/>Y:d}_{1}\;\;\textrm{Y:d}_{2} & \Rightarrow & h(\mathrm{d}_{1})\rightarrow h(\mathrm{d}_{2})\\
+\textrm{Y:d}_{1}\;\;\textrm{X\textbackslash<Y:d}_{2} & \Rightarrow & h(\mathrm{d}_{1})\leftarrow h(\mathrm{d}_{2})\\
+\textrm{Y:d}_{1}\;\;\textrm{X\textbackslash>Y:d}_{2} & \Rightarrow & h(\mathrm{d}_{1})\rightarrow h(\mathrm{d}_{2})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition to the standard combinatory rules for forward and backward functiona
+l application above, the Thai CG bank makes use of a CCG-style 
+\emph on
+serialisation
+\emph default
+ rule to handle e.g.
+ serial verb constructions, which are used in Thai (and Chinese) to express
+ serial or consecutive events.
+ As 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "boonkwan2009amemorybased"
+
+\end_inset
+
+, we take the notion of a 
+\emph on
+serial verb construction
+\emph default
+ to mean a series of verbs or verb phrases without explicit connectives
+ marked with (or understood to have) the same grammatical categories, and
+ sharing at least one common argument, typically a subject.
+ 
+\end_layout
+
+\begin_layout Standard
+As an example, the verbs 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ตรวจ
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+examine
+\begin_inset Quotes erd
+\end_inset
+
+) and 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+พบ
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+find
+\begin_inset Quotes erd
+\end_inset
+
+) occur serially in the following sentence
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Articifial word boundaries inserted for clarity.
+\end_layout
+
+\end_inset
+
+ from the CG bank, indicating a resultative course of events 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "thepkanjana2009resultative"
+
+\end_inset
+
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "90col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align left
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+นักวิชาการ ตรวจ พบ ไวรัส โคโรน่า ใน ชะมด
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+(
+\series bold
+Lit
+\series default
+: scientist/N examine/V find/V virus/N corona/N in/PP otter-civet/N)
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+\begin_inset Quotes eld
+\end_inset
+
+The scientist examined the otter-civet and found coronavirus.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We introduce a generalised derivation rule for serial constructions which
+ simply designates the head of the first dependency structure as governing
+ the head of the following dependency structure:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\textrm{X:d}_{1}\;\;\textrm{X:d}_{2} & \Rightarrow & h(\mathrm{d}_{1})\rightarrow h(\mathrm{d}_{2})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The rule is generalised in the sense that it handles 
+\emph on
+serial noun constructions
+\emph default
+ as well as serial verb constructions.
+ 
+\end_layout
+
+\begin_layout Standard
+Further CCG-style combinatory rules, such as functional composition and
+ type raising, are not currently in use in the Thai CG bank, and therefore
+ not handled by the transformation.
+ 
+\end_layout
+
+\begin_layout Standard
+An outline of the head finding procedure is given as Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:head-finding"
+
+\end_inset
+
+.
+ Intuitively, the algorithm proceeds by, for each node in turn, beginning
+ at the terminal nodes, identifying sibling nodes which satisfy the arity
+ of the of the node CG type.
+ For each sibling node satisfying an argument, the dependency derivation
+ rule is applied and the sibling is removed.
+ 
+\end_layout
+
+\begin_layout Standard
+It is worth noting that while both terminal and non-terminal nodes are involved
+ in this process, we are only interested in assigning dependency arcs to
+ terminal nodes, as non-terminals are absent in the all-terminal dependency
+ structure.
+ This is ensured by an implementation detail of the procedure 
+\begin_inset Formula $\mathtt{registerHead}$
+\end_inset
+
+ (omitted from Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:head-finding"
+
+\end_inset
+
+), in which non-terminal nodes act as proxies for their terminal heads.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},language=Python"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def assignHeads(node):
+\end_layout
+
+\begin_layout Plain Layout
+
+  for c in node.nonterminalChildren:
+\end_layout
+
+\begin_layout Plain Layout
+
+    assignHeads(c)
+\end_layout
+
+\begin_layout Plain Layout
+
+  for c in node.terminalChildren:
+\end_layout
+
+\begin_layout Plain Layout
+
+    assignHeads(c)
+\end_layout
+
+\begin_layout Plain Layout
+
+  for arg in node.type.arguments:
+\end_layout
+
+\begin_layout Plain Layout
+
+    if arg.side == 'right':
+\end_layout
+
+\begin_layout Plain Layout
+
+      sibl = node.rightSiblings.first
+\end_layout
+
+\begin_layout Plain Layout
+
+    else
+\end_layout
+
+\begin_layout Plain Layout
+
+      sibl = node.leftSiblings.last
+\end_layout
+
+\begin_layout Plain Layout
+
+    break unless arg.matches(sibl)
+\end_layout
+
+\begin_layout Plain Layout
+
+    if arg.side == 'right':
+\end_layout
+
+\begin_layout Plain Layout
+
+      if arg.dependencyDir == '>':
+\end_layout
+
+\begin_layout Plain Layout
+
+        registerHead(sibl, node)
+\end_layout
+
+\begin_layout Plain Layout
+
+      else: # <
+\end_layout
+
+\begin_layout Plain Layout
+
+        registerHead(node, sibl)
+\end_layout
+
+\begin_layout Plain Layout
+
+      node.rightSiblings.shift
+\end_layout
+
+\begin_layout Plain Layout
+
+    else: # left
+\end_layout
+
+\begin_layout Plain Layout
+
+      if arg.dependencyDir == '>':
+\end_layout
+
+\begin_layout Plain Layout
+
+        registerHead(node, sibl)
+\end_layout
+
+\begin_layout Plain Layout
+
+      else: # <
+\end_layout
+
+\begin_layout Plain Layout
+
+        registerHead(sibl, node)
+\end_layout
+
+\begin_layout Plain Layout
+
+      node.leftSiblings.pop  
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Pseudo-code for the head-finding procedure.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:head-finding"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dependency labeling
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Dependency-labeling"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Although the CDG-augmentation of the CG treebank implies a dependency structure
+ for each sentence, there are no immediate clues available about the specific
+ grammatical functions of dependency arcs.
+ Obviously, there are some clear-cut cases: When a token with CDG type 
+\begin_inset Formula $\mathtt{((s\backslash<np)\backslash>(s\backslash<np))\backslash<num}$
+\end_inset
+
+ modifies a token with CDG type 
+\begin_inset Formula $\mathtt{num}$
+\end_inset
+
+, it must be an application of a 
+\emph on
+quantifier
+\emph default
+ (with dependency type 
+\begin_inset Quotes eld
+\end_inset
+
+quan
+\begin_inset Quotes erd
+\end_inset
+
+), as exemplified in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Given-the-CDG"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename deprels/quan.eps
+	width 75text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+An unmistakekable labeling case: Given the CDG types of 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+หลาย
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+diverse
+\begin_inset Quotes erd
+\end_inset
+
+) and 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ชนิด
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+species
+\begin_inset Quotes erd
+\end_inset
+
+), the only dependency label supported by the examined data is 
+\begin_inset Quotes eld
+\end_inset
+
+quan
+\begin_inset Quotes erd
+\end_inset
+
+ (
+\emph on
+quantifier
+\emph default
+).
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Given-the-CDG"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Other cases are less obvious.
+ Even when taking dependency direction and argument position into consideration,
+ there are still cases with several possible dependency types, as shown
+ in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Different-labeling"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+While for many practical purposes an unlabeled dependency structure is sufficien
+t, having proper dependency labels is nonetheless desirable.
+ In lack of an exact transformation, the approach explored in this work
+ relies instead on training a classifier to predict the correct dependency
+ label given local features of the tokens involved, as they occur in the
+ dependency structure derived from the CDG tree.
+ Two feature sets are suggested: The basic set comprising head and dependent
+ CDG type, as well as dependency direction (
+\begin_inset Quotes eld
+\end_inset
+
+L
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+R
+\begin_inset Quotes erd
+\end_inset
+
+, as seen from the dependent).
+ The other set extends the basic set by including surface forms.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename deprels/subj.eps
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Subject (subj)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename deprels/dobj.eps
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Direct object (dobj)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename deprels/advm.eps
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+adverbialiser (advm)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Different labeling of left-pointing dependency arcs with 
+\begin_inset Formula $\mathtt{s\backslash<np/>np}$
+\end_inset
+
+ as head CDG type and 
+\begin_inset Formula $\mathtt{np}$
+\end_inset
+
+ as dependent CDG type.
+ See Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:dep-types"
+
+\end_inset
+
+ for depency type abbreviations.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Different-labeling"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Experiments
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Experiments"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Thai CG bank made available for this research contains 1,428 CG trees,
+ comprised of
+\end_layout
+
+\begin_layout Itemize
+539 verb phrases or subject-omitted phrases (
+\begin_inset Formula $\mathtt{s\backslash np}$
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Itemize
+363 sentences (
+\begin_inset Formula $\mathtt{s}$
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Itemize
+372 noun phrases (
+\begin_inset Formula $\mathtt{np}$
+\end_inset
+
+) and
+\end_layout
+
+\begin_layout Itemize
+4 prepositional phrases
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+As there is no explicit sentence boundary marker in Thai 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "satayamas2004widecoverage"
+
+\end_inset
+
+, it is often unclear what constitutes 
+\begin_inset Quotes eld
+\end_inset
+
+a sentence
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The distribution of tree types reflect the partitioning of token sequences
+ made by the treebank annotators for the purpose of treebanking.
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Formula $\mathtt{pp}$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+The lexical dictionary used contains possible CDG types for 38.250 word forms,
+ with an average of 2 types listed per word form.
+ For six of the word forms, the dictionary lists several possible dependency
+ directions for a single CG type.
+ These confusable CDG types and the dictionary entries they occur for are
+ listed in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:ambi-dict"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide true
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="4">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Word form(s)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CG type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Possible CDG equivalents
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Interpretation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+น่า
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{(s\backslash np)/(s\backslash np)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{(s\backslash<np)/>(s\backslash<np)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Adverb 
+\begin_inset Quotes eld
+\end_inset
+
+please
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{(s\backslash<np)/<(s\backslash<np)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Auxiallary verb 
+\begin_inset Quotes eld
+\end_inset
+
+should
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ตอนนั้น
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+at that time
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/>s}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Conjunction
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ตอนนี้
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+at present
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/s}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ขณะนั้น
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+at that moment
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/<s}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Adverb of time
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ขณะนี้
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+this moment
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+กับ
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{np\backslash<np/>np}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{np\backslash>np/>np}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Preposition 
+\begin_inset Quotes eld
+\end_inset
+
+with
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{np\backslash<np/>np}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Conjunction 
+\begin_inset Quotes eld
+\end_inset
+
+and
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Entries in the lexical dictionary which are ambiguous with respect to dependency
+ direction
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:ambi-dict"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An example sentence from the treebank affected by the ambiguous mapping
+ of the adverb 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ตอนนี้
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+at present
+\begin_inset Quotes erd
+\end_inset
+
+) is 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The Thai auxillary verb 
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+กำลัง
+\end_layout
+
+\end_inset
+
+ indicates the present participle, meaning "in the act of", similar to the
+ English suffix, "-ing".
+ Articifial word boundaries has been inserted for clarity.
+\end_layout
+
+\end_inset
+
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "90col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Thai
+status collapsed
+
+\begin_layout Plain Layout
+ตอนนี้ เธอ กำลัง ยุ่ง มาก
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+(
+\series bold
+Lit
+\series default
+: this-moment/ADV she/PRON 
+\begin_inset Quotes eld
+\end_inset
+
+-ing
+\begin_inset Quotes erd
+\end_inset
+
+/AUX busy/ADJ very/ADV)
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+\begin_inset Quotes eld
+\end_inset
+
+At this moment she is being very busy.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align left
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Examples of the latter two ambiguity classes of the lexical dictionary (Table
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:ambi-dict"
+
+\end_inset
+
+) were not encountered in the treebank --- i.e.
+ the affected word forms do not occur with an ambiguous CG type.
+ In dealing with these ambiguous entries in the lexical dictionary, we simply
+ (and naively) choose the first mapping option.
+\end_layout
+
+\begin_layout Standard
+The generic CG to CDG mapping, used in addition to the lexical dictionary
+ as fallback for word forms not found in the lexical dictionary, also exhibits
+ some degree of ambiguity.
+ The seven CG types with multiple possible CDG equivalents are listed in
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:map"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="4cm">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CG type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Possible CDG equivalents
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{np\backslash np/np}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{np\backslash>np/>np}$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+linebreak 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\mathtt{np\backslash<np/>np}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/s}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/>s}$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+linebreak 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\mathtt{s/<s}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s\backslash s}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s\backslash>s}$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+linebreak 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\mathtt{s\backslash<s}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{(s\backslash np)/(s\backslash np)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{(s\backslash<np)/>(s\backslash<np)}$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+linebreak 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\mathtt{(s\backslash<np)/<(s\backslash<np)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/(s\backslash np)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/>(s\backslash<np)}$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+linebreak 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\mathtt{s/<(s\backslash<np)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s\ensuremath{\backslash(s\backslash np)}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s\backslash<(s\backslash<np)}$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+linebreak 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\mathtt{s\backslash>(s\backslash<np)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/(s\backslash np)/np}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathtt{s/>(s\backslash np)/>np}$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+linebreak 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\mathtt{s/<(s\backslash np)/>np}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Cases of CD to CDG mappings which are ambigous with respect to dependency
+ direction
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:map"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dependency labeling 
+\end_layout
+
+\begin_layout Standard
+To evaluate the classification-based approach to assigning dependency labels,
+ a sample of 678 labeled dependency edges from the NAiST dependency treebank
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "wacharamanotham2007thedevelopment"
+
+\end_inset
+
+ was used, along with corresponding CDG trees obtained from a related work
+ (manuscript in preparation).
+ The 
+\emph on
+basic
+\emph default
+ and 
+\emph on
+extended
+\emph default
+ feature sets desribed in section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:Dependency-labeling"
+
+\end_inset
+
+ were evaluated with four different classifiers
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Experiments with the learners were done using leave-one-out cross-validation,
+ with the exception of LibSVM, which was run using the standard K-fold cross-val
+idation of the easy.py script 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "chang2001libsvma"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ (see Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:accuracy"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="decimal" decimal_point="." valignment="top" width="0">
+<column alignment="decimal" decimal_point="." valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Classifier
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="decimal" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Basic feats
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++forms
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RandomForest-Weka
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="decimal" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61.8%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+69.5%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LibSVM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="decimal" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+62.8%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+74.2%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NearestNeighbors
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="decimal" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+60.9%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+68.0%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NaiveBayes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="decimal" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+60.2%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+60.2%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Accuracy of different classifiers in recovering the correct dependency labels
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:accuracy"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Discussion
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Discussion"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The process of transforming CDG-augmented CG trees to (unlabeled) dependency
+ trees was (not surprisingly) successful.
+ In this work, the issue of ambiguous CDG types affects only a very small
+ number of trees, but remains an issue to be aware of.
+ 
+\end_layout
+
+\begin_layout Standard
+Dependency labels were not reliably recoverable by looking only at CDG types
+ and dependency direction.
+ However, by including head and dependent token surface forms as features
+ for the classifier, a substantial reduction in error rate --- from 0.372
+ to 0.258 (
+\begin_inset Formula $\approx31\%$
+\end_inset
+
+) --- was gained.
+ It seems hopeful that even better recovery of dependency labels can be
+ obtained with this approach once more training material (in the form of
+ sentences with both CDG and labeled dependency analyses) become available.
+\end_layout
+
+\begin_layout Standard
+Rather than the approximated classfier-based approach to labeling, one could
+ consider settling for an exact but partial labeling by only assigning those
+ dependency labels which unambigously arise from tuples of head and dependent
+ CDG types.
+ However, the dependency labels obtainable with absolute certainty in this
+ way are often of the less interesting kind --- e.g.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+conj
+\begin_inset Quotes erd
+\end_inset
+
+ for a 
+\begin_inset Formula $\mathtt{s\backslash<np}$
+\end_inset
+
+ governed by a 
+\begin_inset Formula $\mathtt{s/>(s\backslash<np)}$
+\end_inset
+
+ --- while the more useful labels remain ambiguous.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Description
+Complements 
+\emph on
+subject
+\emph default
+ (subj) • 
+\emph on
+clausal subject
+\emph default
+ (csubj) • 
+\emph on
+direct object
+\emph default
+ (dobj) • 
+\emph on
+indirect object
+\emph default
+ (iobj) • 
+\emph on
+prepositional object
+\emph default
+ (pobj) • 
+\emph on
+prepositional complement
+\emph default
+ (pcomp) • 
+\emph on
+subject or object predicative
+\emph default
+ (pred) • 
+\emph on
+clausal predicative
+\emph default
+ (cpred) • 
+\emph on
+conjunction
+\emph default
+ (conj) • 
+\emph on
+subordinating conjunction
+\emph default
+ (sconj) • 
+\emph on
+nominaliser
+\emph default
+ (nom) • 
+\emph on
+adverbialiser
+\emph default
+ (advm)
+\end_layout
+
+\begin_layout Description
+Adjuncts 
+\emph on
+parenthetical modifier
+\emph default
+ (modp) • 
+\emph on
+restrictive modifier
+\emph default
+ (modr) • 
+\emph on
+tense modifier
+\emph default
+ (modt) • 
+\emph on
+mood modifier
+\emph default
+ (modm) • 
+\emph on
+aspect modifier
+\emph default
+ (moda) • 
+\emph on
+locative modifier
+\emph default
+ (modl) • 
+\emph on
+parenthetical apposition
+\emph default
+ (appa) • 
+\emph on
+restrictive apposition
+\emph default
+ (appr) • 
+\emph on
+relative clause modification
+\emph default
+ (rel) • 
+\emph on
+determiner
+\emph default
+ (det) • 
+\emph on
+quantifier
+\emph default
+ (quan) • 
+\emph on
+classifier
+\emph default
+ (cl) • 
+\emph on
+coordination
+\emph default
+ (coord) • 
+\emph on
+negation
+\emph default
+ (neg) • 
+\emph on
+punctuation
+\emph default
+ (punc) • 
+\emph on
+double preposition
+\emph default
+ (dprep) • 
+\emph on
+parallel serial verb
+\emph default
+ (svp) • 
+\emph on
+sequence serial verb
+\emph default
+ (svs)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Dependency types from the annotation guidelines 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "sudprasert2008dependency"
+
+\end_inset
+
+ for the NAiST dependency treebank.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:dep-types"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusion and future work
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Conclusion"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the process, a considerable amount of syntactical and annotational errors
+ in the Thai CG bank were identified and corrected.
+ The authors are of the belief that this work has not only provided a means
+ for continual expansion of resources for Thai natural language processing,
+ but also helped improve the quality the existing CG resource.
+\end_layout
+
+\begin_layout Standard
+As a related work (manuscript in preparation) progresses, more CDG trees
+ for labeled NAiST dependency trees will become available.
+ With this extra training material, the learned classifier used for labeling
+ in this work should become more reliable.
+ Further improvement might also be achievable from an expanded feature set,
+ including for example the argument position (in addition to side) and one
+ or two generations of grandparent nodes.
+\end_layout
+
+\begin_layout Standard
+Further development of the Thai CDG formalism is also expected, in particular
+ for the analysis of sentence-like noun phrases.
+ This will likely need special handling in the dependency representation
+ as well.
+ Currently, the NAiST annotation guidelines do not specify a label for this
+ phenomenon.
+ 
+\end_layout
+
+\begin_layout Section*
+Acknowledgements
+\end_layout
+
+\begin_layout Standard
+The authors wish to thank the NAiST unit of Kasetsart University and the
+ HLT Lab of NECTEC for making their treebanks available for experiments.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "references"
+options "plainnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

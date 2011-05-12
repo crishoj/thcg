@@ -1,0 +1,30 @@
+1	ปลูก	plant	vt	s\<np/>pp	_	0	root
+2	ด้วย	by	prep	pp/>np	_	1	pobj
+3	เมล็ด	seed	ncn	np	_	2	pcomp
+4	เป็น	be	advm2	s\<np/>np	_	1	modr
+5	ส่วนใหญ่	norm	adv	np	_	4	advm
+
+1	พรวน	hoe	vt	s\<np/>np	_	0	root
+2	ดิน	dirt	ncn	np	_	1	dobj
+3	กลบ	bury	vt	s\<np	_	1	svs
+4	แล้ว	then	conj	s\<np	_	3	coord
+5	รดน้ำ	water	vt	s\<np	_	4	conj
+
+1	ทำให้	make	vcau	s\<np/>s	_	0	root
+2	ขนม	sweets	ncn	np	_	4	subj
+3	ไม่	not	neg	(s\<np)/<(s\<np)	_	4	neg
+4	ติด	stick	vt	s\<np/>np	_	1	cpred
+5	ใบตอง	banana_leaf	ncn	np	_	4	dobj
+
+1	หลังจากนั้น	afterwards	conj	s/>(s\<np)	_	0	root
+2	ตก	fall	vi	s\<np/>np	_	1	conj
+3	ผล	effect	ncn	np	_	2	subj
+4	น้อย	less	vi	s\<np	_	2	svs
+5	ลง	descend	vpost	(s\<np)\>(s\<np)	_	4	modp
+
+1	พืช	fauna	ncn	np	_	3	subj
+2	หัว	principal	ncn	np	_	1	modr
+3	มี	have	vt	s\<np	_	0	root
+4	มากมาย	abundantly	adv	(s\<np)\>(s\<np)	_	3	modp
+5	หลาย	diverse	adj	num	_	6	quan
+6	ชนิด	species	cl	((s\<np)\>(s\<np))\<num	_	3	cl

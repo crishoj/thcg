@@ -1,0 +1,33 @@
+﻿0_RIKUGHRX 0_SH6TQCTP 0_2B9JIQAX 0_MCP4GU5X 0_CZFMHT6Q
+
+@inproceedings{boonkwan2009amemorybased,
+	title = {A memory-based approach to the treatment of serial verb construction in combinatory categorial grammar},
+	booktitle = {Proceedings of the 12th Conference of the European Chapter of the Association for Computational Linguistics: Student Research Workshop},
+	author = {P. Boonkwan},
+	year = {2009},
+	pages = {10–18}
+}
+
+@inproceedings{buchholz2006conllxshared,
+	title = {{CoNLL-X} shared task on Multilingual Dependency Parsing},
+	booktitle = {Tenth Conference on Computational Natural Language Learning},
+	author = {Sabine Buchholz and Erwin Marsi},
+	year = {2006},
+	pages = {149}
+}
+
+@inproceedings{satayamas2004widecoverage,
+	title = {{Wide-Coverage} Grammar Extraction from Thai Treebank},
+	booktitle = {Proceedings of Papillon 2004 Workshops on Multilingual Lexical Databases},
+	author = {V. Satayamas and A. Kawtrakul},
+	year = {2004}
+}
+
+@inproceedings{wacharamanotham2007thedevelopment,
+	address = {Thailand},
+	title = {The Development of Web-based Annotation System for Thai Treebank},
+	url = {http://naist.cpe.ku.ac.th/tred/},
+	author = {C. Wacharamanotham and M. Suktarachan and A. Kawtrakul},
+	year = {2007},
+	pages = {305}
+}
