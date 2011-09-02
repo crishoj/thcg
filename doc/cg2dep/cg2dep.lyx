@@ -152,15 +152,16 @@ A method for deriving an approximately labeled dependency treebank from
  the Thai Categorial Grammar Treebank has been implemented.
  The method involves a lexical dictionary for assigning dependency directions
  to the CG types associated with the grammatical entities in the CG bank,
- falling back on a generic CG to CDG mapping in case of unknown words.
- Currently, just a handful of the trees in the Thai CG bank cannot unambiguously
+ falling back on a generic mapping of CG types in case of unknown words.
+ Currently, all but a handful of the trees in the Thai CG bank can unambiguously
  be transformed into directed dependency trees.
- Derived dependency arcs are optionally labeled with a learned classfier,
- achieving 
-\begin_inset Formula $\approx75\%$
+ Dependency labels can optionally be assigned with a learned classfier,
+ which in a preliminary evaluation with a very small training set achieves
+ 
+\begin_inset Formula $76.5\%$
 \end_inset
 
- label accuracy on a sample set.
+ label accuracy.
  In the process, a number of annotation errors in the CG bank were identified
  and corrected.
  Although rather limited in its coverage, excluding e.g.
@@ -190,14 +191,12 @@ key "wacharamanotham2007thedevelopment,sudprasert2008dependency"
 
 \end_inset
 
- --- others being either unpublished or minuscule in size.
- These treebanks were approved manually by linguists, and therefore expectedly
- reliable in terms of accuracy.
- However, each resource is fairly limited in size.
+.
+ Others are either unpublished or minuscule in size.
  Rather than relying exclusively on labor-intensive manual annotation for
  further expanding the resources, it would be economically sound to leverage
- existing efforts and transform an existing treebank in one grammar into
- the another.
+ existing efforts and transform an existing treebank in one formalism into
+ another.
 \end_layout
 
 \begin_layout Subsection
@@ -210,14 +209,14 @@ Categorial grammar (CG) is a lexicalised theory in natural language syntax
  to the syntactic elements 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "ajdukiewicz1935diesyntaktische,steedman2000thesyntactic"
+key "steedman2000thesyntactic,ajdukiewicz1935diesyntaktische"
 
 \end_inset
 
 , and forms the theoretical basis for the Thai CG treebank.
  The resource building effort has been very fruitful, but there remains
- phenomena of Thai languge, including long-range dependencies and topicalisation
- 
+ phenomena of Thai languge, including long-distance dependencies and topicalisat
+ion 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "warotamasikkhadit1997fronting"
@@ -231,7 +230,7 @@ key "warotamasikkhadit1997fronting"
 \begin_layout Standard
 Additionally, although Thai language belongs to a fixed word order typology,
  Thai spoken language exhibits some flexibility in word order, due to the
- occasional preference of Thai language users for correspondance in rhyme.
+ occasional preference of Thai language users for correspondence in rhyme.
  As an example, consider the following sentence
 \begin_inset Foot
 status open
@@ -256,7 +255,7 @@ status collapsed
 \end_inset
 
  suffix, which produces an adverbial form from an adjective.
- Artificial word boundaries has beeen inserted for clarity.
+ Artificial word boundaries are inserted for clarity.
 \end_layout
 
 \end_inset
@@ -288,7 +287,7 @@ status open
 status collapsed
 
 \begin_layout Plain Layout
-อังกฤษ คิดค้น อย่าง หนัก วัคซีนป้องกันเชื้อไวรัสไข้หวัดนก
+อังกฤษ คิดค้น อย่าง หนัก วัคซีน ป้องกันเชื้อ ไวรัส ไข้หวัดนก
 \end_layout
 
 \end_inset
@@ -309,7 +308,7 @@ Lit
 \begin_inset Quotes erd
 \end_inset
 
-/ADVPFX heavy/ADJ avian_flu_vaccine/NP)
+/ADVPFX heavy/ADJ vaccine/N protect/V virus/N avian_flu/NP)
 \end_layout
 
 \begin_layout Plain Layout
@@ -375,7 +374,22 @@ lly pleasing sound patterns, it results in a marked form, but the phenomenon
 
 \end_inset
 
- in order for the last syllable of 
+ in order for the last syllable [ 
+\emph on
+nak
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\emph off
+L
+\end_layout
+
+\end_inset
+
+
+\emph default
+] of 
 \begin_inset Flex Thai
 status collapsed
 
@@ -385,7 +399,22 @@ status collapsed
 
 \end_inset
 
- to rhyme with the first syllable of 
+ to rhyme with the first syllable [ 
+\emph on
+wak
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\emph off
+H
+\end_layout
+
+\end_inset
+
+
+\emph default
+] of 
 \begin_inset Flex Thai
 status collapsed
 
@@ -430,7 +459,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Examplar of ambiguity arising only in dependency representation 
+Example of ambiguity arising only in dependency representation 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "daum2004automatic"
@@ -462,9 +491,8 @@ Dependency representation
 \end_layout
 
 \begin_layout Standard
-In recent years, dependency representation has seen a dramatic increase
- in interest, likely due to a number of appealing properties of the representati
-on.
+In recent years, dependency grammar has seen a dramatic increase in interest,
+ likely due to a number of appealing properties of the representation.
  In comparison to phrase structure grammar, dependency structures provide
  a relatively direct encoding of predicate-argument structure, which is
  relevant to subsequent analyses 
@@ -735,23 +763,22 @@ reference "sec:Experiments"
 
 \end_inset
 
- describes the experimental setting and results, which are discussed in
- Section 
+ describes the experimental setting and results.
+ A discussion follows in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Discussion"
 
 \end_inset
 
-.
- Finally, Section 
+, and conclusions in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Conclusion"
 
 \end_inset
 
- concludes the paper.
+ .
  
 \end_layout
 
@@ -775,7 +802,7 @@ key "buchholz2006conllxshared"
 \end_inset
 
 , a number dependency trees were derived from a number of constituency-based
- phrase structure treebanks, most of which has grammatical function (e.g.
+ phrase structure treebanks, most of which have grammatical function (e.g.
  
 \begin_inset Quotes eld
 \end_inset
@@ -949,7 +976,7 @@ For any given CG type
 \begin_inset Formula $t$
 \end_inset
 
-, we use thethe 
+, we use the 
 \emph on
 arity
 \emph default
@@ -1066,11 +1093,11 @@ Dependency directions
 \end_layout
 
 \begin_layout Standard
-The first transformation step, which can rightly be regarded as a necessary
- preprocessing step before the actual transformation, involves a lexical
- dictionary for assigning dependency directions to the CG types associated
- with the grammatical entities in the CG bank, falling back on a generic
- CG to CDG mapping in case of unknown words.
+The first transformation step, which can be regarded as a preprocessing
+ step before the actual transformation, involves a lexical dictionary for
+ assigning dependency directions to the CG types associated with the grammatical
+ entities in the CG bank, falling back on a generic CG to CDG mapping in
+ case of unknown words.
  
 \end_layout
 
@@ -1103,7 +1130,7 @@ of each child node.
 \begin_inset Float algorithm
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset listings
@@ -1206,6 +1233,13 @@ key "collins1999headdriven"
 \end_inset
 
 ).
+ The idea is to trace the derivation implied by the CG rules, registering
+ the dependency relations specified by the CDG-augmentation along the way.
+ 
+\end_layout
+
+\begin_layout Standard
+The derivation rules handled are as follows.
  Let 
 \begin_inset Formula $c:d$
 \end_inset
@@ -1302,6 +1336,60 @@ the head of
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+In a simple example, 
+\emph on
+Mary
+\emph default
+[
+\begin_inset Formula $\mathtt{np}$
+\end_inset
+
+] 
+\emph on
+drinks
+\emph default
+[
+\begin_inset Formula $\mathtt{s\backslash<np/>np}$
+\end_inset
+
+] 
+\emph on
+fresh
+\emph default
+[
+\begin_inset Formula $\mathtt{np/<np}$
+\end_inset
+
+] 
+\emph on
+milk
+\emph default
+[
+\begin_inset Formula $\mathtt{np}$
+\end_inset
+
+], 
+\emph on
+fresh
+\emph default
+ would combine with 
+\emph on
+milk
+\emph default
+, yielding an 
+\begin_inset Formula $\mathtt{np}$
+\end_inset
+
+ and a dependency arc specifying 
+\emph on
+milk
+\emph default
+ as head of 
+\emph on
+fresh.
 \end_layout
 
 \begin_layout Standard
@@ -1425,7 +1513,7 @@ status collapsed
 \series bold
 Lit
 \series default
-: scientist/N examine/V find/V virus/N corona/N in/PP otter-civet/N)
+: scientist/N examine/V find/V virus/N corona/N in/PP civet/N)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1433,7 +1521,7 @@ Lit
 \begin_inset Quotes eld
 \end_inset
 
-The scientist examined the otter-civet and found coronavirus.
+The scientist examined the civet and found coronavirus.
 \begin_inset Quotes erd
 \end_inset
 
@@ -1842,25 +1930,92 @@ t, having proper dependency labels is nonetheless desirable.
  relies instead on training a classifier to predict the correct dependency
  label given local features of the tokens involved, as they occur in the
  dependency structure derived from the CDG tree.
- Two feature sets are suggested: The basic set comprising head and dependent
- CDG type, as well as dependency direction (
+ 
+\end_layout
+
+\begin_layout Standard
+From a related work (manuscript in preparation), we have obtained a number
+ of CDG trees from labeled dependency trees.
+ Such pairs of 
+\emph on
+labeled
+\emph default
+ dependency trees and CDG trees can serve as training material for the label
+ classifier.
+\end_layout
+
+\begin_layout Standard
+We evaluate different feature sets for classification task.
+ The basic feature set contains:
+\end_layout
+
+\begin_layout Itemize
+CDG type of token and its head
+\end_layout
+
+\begin_layout Itemize
+# of left siblings
+\end_layout
+
+\begin_layout Itemize
+# of right siblings
+\end_layout
+
+\begin_layout Itemize
+Dependency direction (L/R)
+\end_layout
+
+\begin_layout Itemize
+Concatenations of token/head CDG and # of left siblings
+\end_layout
+
+\begin_layout Standard
+Other feature sets extend the basic set including additional information:
+\end_layout
+
+\begin_layout Description
++forms Token and head word form.
+\end_layout
+
+\begin_layout Description
++POS(L) Part-of-speech tag for the token, as assigned by a learned part-of-speec
+h tagger
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+SVMTool 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gimenez2004svmtool"
+
+\end_inset
+
+, trained on the Orchid corpus 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "sornlertlamvanich1997orchidthai"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
++POS(G) 
 \begin_inset Quotes eld
 \end_inset
 
-L
+Gold
 \begin_inset Quotes erd
 \end_inset
 
- or 
-\begin_inset Quotes eld
-\end_inset
-
-R
-\begin_inset Quotes erd
-\end_inset
-
-, as seen from the dependent).
- The other set extends the basic set by including surface forms.
+ part-of-speech tag as found in the labeled dependency tree.
 \end_layout
 
 \begin_layout Standard
@@ -2017,8 +2172,28 @@ name "sec:Experiments"
 \end_layout
 
 \begin_layout Standard
-The Thai CG bank made available for this research contains 1,428 CG trees,
- comprised of
+The Thai CG bank made available for this research contains 1,428 phrases
+ with corresponding CG trees.
+ Trees are mostly medium to low in token count, with 49 single-token trees,
+ and the longest phrase having 9 tokens.
+ Median phrase length is 3 tokens.
+ With a total token count of 5,143 tokens, the arithmetic mean length is
+ 3.60.
+ 
+\end_layout
+
+\begin_layout Standard
+As there is no explicit sentence boundary marker in Thai 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "satayamas2004widecoverage"
+
+\end_inset
+
+, it is often unclear what constitutes a sentence.
+ Thus, rather than ordinary sentences, the treebank contains phrases of
+ different types, reflecting the partitioning of token sequences made by
+ the treebank annotators for the purpose of treebanking:
 \end_layout
 
 \begin_layout Itemize
@@ -2046,34 +2221,7 @@ The Thai CG bank made available for this research contains 1,428 CG trees,
 \end_layout
 
 \begin_layout Itemize
-4 prepositional phrases
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-As there is no explicit sentence boundary marker in Thai 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "satayamas2004widecoverage"
-
-\end_inset
-
-, it is often unclear what constitutes 
-\begin_inset Quotes eld
-\end_inset
-
-a sentence
-\begin_inset Quotes erd
-\end_inset
-
-.
- The distribution of tree types reflect the partitioning of token sequences
- made by the treebank annotators for the purpose of treebanking.
-\end_layout
-
-\end_inset
-
- (
+4 prepositional phrases (
 \begin_inset Formula $\mathtt{pp}$
 \end_inset
 
@@ -2666,7 +2814,7 @@ status collapsed
 
  indicates the present participle, meaning "in the act of", similar to the
  English suffix, "-ing".
- Articifial word boundaries has been inserted for clarity.
+ Articifial word boundaries are inserted for clarity.
 \end_layout
 
 \end_inset
@@ -3147,31 +3295,18 @@ name "tab:map"
 
 \end_layout
 
-\begin_layout Subsection
-Dependency labeling 
-\end_layout
-
 \begin_layout Standard
-To evaluate the classification-based approach to assigning dependency labels,
- a sample of 678 labeled dependency edges from the NAiST dependency treebank
- 
+In evaluating the classification-based approach to assigning dependency
+ labels, a sample of 678 labeled dependency edges from the NAiST dependency
+ treebank 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "wacharamanotham2007thedevelopment"
 
 \end_inset
 
- was used, along with corresponding CDG trees obtained from a related work
- (manuscript in preparation).
- The 
-\emph on
-basic
-\emph default
- and 
-\emph on
-extended
-\emph default
- feature sets desribed in section 
+ was used, along with corresponding CDG trees.
+ The feature sets suggested in section 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sub:Dependency-labeling"
@@ -3209,20 +3344,89 @@ reference "tab:accuracy"
 
 \begin_layout Standard
 \begin_inset Float table
-wide false
+wide true
 sideways false
 status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="3">
+<lyxtabular version="3" rows="6" columns="7">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="0">
-<column alignment="decimal" decimal_point="." valignment="top" width="0">
-<column alignment="decimal" decimal_point="." valignment="top" width="0">
+<column alignment="right" valignment="top" width="0">
+<column alignment="right" valignment="top" width="0">
+<column alignment="right" valignment="top" width="0">
+<column alignment="right" valignment="top" width="0">
+<column alignment="right" valignment="top" width="0">
+<column alignment="right" valignment="top" width="0">
 <row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="right" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Basic
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="right" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++forms
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="right" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++POS(L)
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="right" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++POS(G)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++POS(L)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
++POS(G)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3231,20 +3435,56 @@ Classifier
 
 \end_inset
 </cell>
-<cell alignment="decimal" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Basic feats
+
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell multirow="4" alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-+forms
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+& +forms
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+& +forms
 \end_layout
 
 \end_inset
@@ -3255,25 +3495,61 @@ Basic feats
 \begin_inset Text
 
 \begin_layout Plain Layout
-RandomForest-Weka
+Random Forest
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="decimal" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-61.8%
+61.9%
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-69.5%
+69.6%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+66.1%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+68.9%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+72.9%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+71.8%
 \end_layout
 
 \end_inset
@@ -3289,24 +3565,58 @@ LibSVM
 
 \end_inset
 </cell>
-<cell alignment="decimal" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\series bold
-62.8%
+64.3%
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+73.9%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+66.1%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+70.2%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+74.5%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
 \series bold
-74.2%
+76.5%
 \end_layout
 
 \end_inset
@@ -3317,25 +3627,61 @@ LibSVM
 \begin_inset Text
 
 \begin_layout Plain Layout
-NearestNeighbors
+Nearest Neighbors
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="decimal" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-60.9%
+60.5%
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-68.0%
+64.8%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+62.4%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+64.5%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+70.5%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+70.4%
 \end_layout
 
 \end_inset
@@ -3346,25 +3692,61 @@ NearestNeighbors
 \begin_inset Text
 
 \begin_layout Plain Layout
-NaiveBayes
+Naive Bayes
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="decimal" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-60.2%
+60.6%
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-60.2%
+63.7%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61.7%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+65.8%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+63.7%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+66.2%
 \end_layout
 
 \end_inset
@@ -3375,10 +3757,15 @@ NaiveBayes
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Accuracy of different classifiers in recovering the correct dependency labels
+Accuracy of different classifiers and feature sets in recovering the correct
+ dependency labels 
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:accuracy"
@@ -3410,33 +3797,39 @@ name "sec:Discussion"
 \end_layout
 
 \begin_layout Standard
-The process of transforming CDG-augmented CG trees to (unlabeled) dependency
- trees was (not surprisingly) successful.
+Transforming CDG-augmented CG trees to unlabeled dependency trees was successful.
  In this work, the issue of ambiguous CDG types affects only a very small
  number of trees, but remains an issue to be aware of.
  
 \end_layout
 
 \begin_layout Standard
-Dependency labels were not reliably recoverable by looking only at CDG types
- and dependency direction.
- However, by including head and dependent token surface forms as features
- for the classifier, a substantial reduction in error rate --- from 0.372
- to 0.258 (
-\begin_inset Formula $\approx31\%$
-\end_inset
-
-) --- was gained.
- It seems hopeful that even better recovery of dependency labels can be
- obtained with this approach once more training material (in the form of
- sentences with both CDG and labeled dependency analyses) become available.
+For dependency labeling, only a small amount of training data (in the form
+ of sentences with both CDG and labeled dependency analyses) was available
+ for this prelimenary experiment.
+ Using this, dependency labels were not reliably recoverable (76.5% label
+ accuracy).
+ However, it seems hopeful that better recovery of dependency labels can
+ be obtained with this approach once more training material become available.
+ 
 \end_layout
 
 \begin_layout Standard
-Rather than the approximated classfier-based approach to labeling, one could
- consider settling for an exact but partial labeling by only assigning those
- dependency labels which unambigously arise from tuples of head and dependent
- CDG types.
+Head and dependent word forms, as well as part-of-speech tags, were beneficial
+ as added features for the label classifier, resulting in a substantial
+ reduction in error rate --- from 0.357 to 0.235 (
+\begin_inset Formula $\approx34\%$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+On the other hand, rather than the approximated classfier-based approach
+ to labeling, one could consider settling for an exact but partial labeling
+ by only assigning those dependency labels which unambigously arise from
+ tuples of head and dependent CDG types.
  However, the dependency labels obtainable with absolute certainty in this
  way are often of the less interesting kind --- e.g.
  
@@ -3455,7 +3848,7 @@ conj
 \begin_inset Formula $\mathtt{s/>(s\backslash<np)}$
 \end_inset
 
- --- while the more useful labels remain ambiguous.
+ --- while more useful labels remain ambiguous.
 \end_layout
 
 \begin_layout Standard
