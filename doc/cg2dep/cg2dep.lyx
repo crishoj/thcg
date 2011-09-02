@@ -1,4 +1,4 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
+﻿#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -2658,7 +2658,7 @@ status collapsed
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\mathtt{np\backslash<np/>np}$
+\begin_inset Formula $\mathtt{np\backslash np/np}$
 \end_inset
 
 
