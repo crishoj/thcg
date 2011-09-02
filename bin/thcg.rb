@@ -178,3 +178,109 @@ command :disambiguate do |c|
   end
 end
 
+command :cdg_deprels do |c|
+  c.syntax = 'thcg cdg_deprels CDG_PARSES CONLL_FILE'
+  c.description = 'What dependency relations do different CDG categories give rise to?'
+  c.option '--external-pos-tags FILE', 'Include POS tags from FILE'
+  c.option '--include-head', 'Include head CDG type in counts'
+  c.option '--with-head CDG', String, 'Count only the given head CDG type'
+  c.option '--with-dependent CDG', String, 'Count only the given dependent CDG type'
+  c.option '--with-dir DIR', String, 'Count only dependencies in given direction (L/R)'
+  c.option '--print', 'Show matched sentences'
+  c.option '--features', 'Output features suitable for learning'
+  c.action do |args, options|
+    cdg_file, dep_file = args
+    warn "Reading CDG sentences from           #{cdg_file}"
+    warn "Reading CONLL trees from             #{dep_file}"
+    cdg_sents = File.new(cdg_file).each("\n\n")
+    dep_sents = File.new(dep_file).each("\n\n")
+    pos_sents = File.new(options.external_pos_tags).each("\n\n") if options.external_pos_tags
+    headers = [
+      'deprel', 
+      'cdg',
+      'head_cdg',
+      'left_siblings',
+      'right_siblings',
+      'cdg+position',
+      'head_cdg+position',
+      'dep_dir',
+      'form',
+      'head_form',
+      'gold_pos',
+    ]
+    headers << 'external_pos' if pos_sents
+    puts headers.join("\t")
+    begin
+      cdg_deprels = Hash.new { |cdgs,cdg| cdgs[cdg] = Hash.new(0) }
+      while (cdg_sent = cdg_sents.next)
+        tokenized, bracketed = cdg_sent.chomp.split(/\r?\n/)
+        cdg_forms = tokenized.split('|').compact.collect { |form| form.gsub(/\A"|"\Z/, '') }
+        warn tokenized if $VERBOSE
+        dep_tree = nil
+        external_pos_tags = nil
+        loop do
+          begin
+            dep_tree = Conll::Sentence.parse(dep_sents.next.split("\n"))
+            external_pos_tags = pos_sents.next.split("\n") if pos_sents
+            break if cdg_forms == dep_tree.tokens.forms
+            warn "\tSkipping: #{dep_tree.tokens.forms}" if $VERBOSE
+          rescue StopIteration
+            warn "No more dependency trees" 
+            exit 1
+          end
+        end
+        warn "\tMatched: #{dep_tree.tokens.forms}" if $VERBOSE
+        cdg_tree = THCG::Parser.parse_bracketed(bracketed)
+        for i in 0...cdg_tree.terminals.count
+          cdg_tok, dep_tok = cdg_tree.terminals[i], dep_tree.tokens[i]
+          key = cdg_tok.type.to_s
+          next if dep_tok.head_id.to_i == 0 # only non-root relations are interesting
+          head_cdg_tok = cdg_tree.terminals[dep_tok.head_id.to_i - 1]
+          dep_dir = dep_tok.id.to_i < dep_tok.head_id.to_i ? "R" : "L"
+          next if options.with_dependent and not options.with_dependent == cdg_tok.type.to_s
+          next if options.with_head and not options.with_head == head_cdg_tok.type.to_s
+          next if options.with_dir and not dep_dir == options.with_dir
+          key += " <- #{head_cdg_tok.type}" if options.include_head
+          cdg_deprels[key][dep_tok.deprel] += 1
+          if options.print
+            puts "Head: #{head_cdg_tok.token}"
+            puts "Dependent: #{cdg_tok.token}"
+            puts "Dir: #{dep_dir}"
+            puts "Label: #{dep_tok.deprel}"
+            puts bracketed
+            puts dep_tree
+            puts
+          end
+          if options.features
+            fields = [
+              dep_tok.deprel, 
+              cdg_tok.type.to_s, 
+              head_cdg_tok.type.to_s,
+              cdg_tok.left_siblings.count,
+              cdg_tok.right_siblings.count,
+              "#{cdg_tok.type.to_s}+#{cdg_tok.left_siblings.count}",
+              "#{head_cdg_tok.type.to_s}+#{cdg_tok.left_siblings.count}",
+              dep_dir,
+              cdg_tok.token,
+              head_cdg_tok.token,
+              dep_tok.pos,
+            ]
+            fields << external_pos_tags.shift if external_pos_tags
+            puts fields.join("\t")
+          end
+        end
+      end
+    rescue StopIteration
+    ensure
+      unless options.features
+        cdg_deprels.each_pair do |cdg, deprels| 
+          puts
+          puts cdg
+          puts " => \t" + deprels.sort_by { |deprel,count| count }.reverse.collect { |deprel,count| 
+            "#{deprel} (#{count} times)"
+          }.join(', ')
+        end
+      end
+    end
+  end
+end
