@@ -35,7 +35,7 @@ module THCG
         end
         warn "    + yields: #{parsed_cdg.yielding}" 
       end
-    end    
+    end
 
     def convert_treebank(data, sent_no = nil)
       warn "Parsing #{data.count("\n")} lines..." 
