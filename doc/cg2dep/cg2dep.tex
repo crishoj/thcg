@@ -43,28 +43,39 @@
 to Dependency Trees}
 
 
-\author{~\\
-~\\
-~\\
-~\\
-}
+\author{\normalsize{Christian Rishøj}\\
+\normalsize{CST}\\
+\normalsize{University of Copenhagen}\\
+\normalsize{crjensen@hum.ku.dk}\\
+\And \normalsize{Taneth Ruangrajitpakorn}\\
+\normalsize{HLT Lab}\\
+\normalsize{NECTEC}\\
+\normalsize{taneth.rua@nectec.or.th}\\
+\And \normalsize{Prachya Boonkwan}\\
+\normalsize{HLT Lab}\\
+\normalsize{NECTEC}\\
+\normalsize{prachya.boo@nectec.or.th}\\
+ \And \normalsize{Thepchai Supnithi}\\
+\normalsize{HLT Lab}\\
+\normalsize{NECTEC}\\
+\normalsize{thepchai.sup@nectec.or.th}}
 \maketitle
 \begin{abstract}
 A method for deriving an approximately labeled dependency treebank
 from the Thai Categorial Grammar Treebank has been implemented. The
 method involves a lexical dictionary for assigning dependency directions
 to the CG types associated with the grammatical entities in the CG
-bank, falling back on a generic CG to CDG mapping in case of unknown
-words. Currently, just a handful of the trees in the Thai CG bank
-cannot unambiguously be transformed into directed dependency trees.
-Derived dependency arcs are optionally labeled with a learned classfier,
-achieving $\approx75\%$ label accuracy on a sample set. In the process,
-a number of annotation errors in the CG bank were identified and corrected.
-Although rather limited in its coverage, excluding e.g. long-distance
-dependencies, topicalisations and longer sentences, the resulting
-treebank is believed to be sound in terms structural annotational
-consistence and a valuable complement to the scarce Thai language
-resources in existence.
+bank, falling back on a generic mapping of CG types in case of unknown
+words. Currently, all but a handful of the trees in the Thai CG bank
+can unambiguously be transformed into directed dependency trees. Dependency
+labels can optionally be assigned with a learned classfier, which
+in a preliminary evaluation with a very small training set achieves
+$76.5\%$ label accuracy. In the process, a number of annotation errors
+in the CG bank were identified and corrected. Although rather limited
+in its coverage, excluding e.g. long-distance dependencies, topicalisations
+and longer sentences, the resulting treebank is believed to be sound
+in terms structural annotational consistence and a valuable complement
+to the scarce Thai language resources in existence.
 \end{abstract}
 
 \section{Introduction}
@@ -73,44 +84,41 @@ Syntactic resources play an essential role for the majority of NLP
 applications, but for Thai language, openly available syntactic resources
 are few in number: So far, the only reported resources are the CG
 treebank \citep{ruangrajitpakorn2009asyntactic} and the NAiST dependency
-bank \citep{wacharamanotham2007thedevelopment,sudprasert2008dependency}
---- others being either unpublished or minuscule in size. These treebanks
-were approved manually by linguists, and therefore expectedly reliable
-in terms of accuracy. However, each resource is fairly limited in
-size. Rather than relying exclusively on labor-intensive manual annotation
-for further expanding the resources, it would be economically sound
-to leverage existing efforts and transform an existing treebank in
-one grammar into the another.
+bank \citep{wacharamanotham2007thedevelopment,sudprasert2008dependency}.
+Others are either unpublished or minuscule in size. Rather than relying
+exclusively on labor-intensive manual annotation for further expanding
+the resources, it would be economically sound to leverage existing
+efforts and transform an existing treebank in one formalism into another.
 
 
 \subsection{Categorial grammar}
 
 Categorial grammar (CG) is a lexicalised theory in natural language
 syntax motivated by the principle of constitutionality and organised
-according to the syntactic elements \citep{ajdukiewicz1935diesyntaktische,steedman2000thesyntactic},
+according to the syntactic elements \citep{steedman2000thesyntactic,ajdukiewicz1935diesyntaktische},
 and forms the theoretical basis for the Thai CG treebank. The resource
 building effort has been very fruitful, but there remains phenomena
-of Thai languge, including long-range dependencies and topicalisation
+of Thai languge, including long-distance dependencies and topicalisation
 \citep{warotamasikkhadit1997fronting}, which are unhandled by the
 instantiation of CG currently in use. 
 
 Additionally, although Thai language belongs to a fixed word order
 typology, Thai spoken language exhibits some flexibility in word order,
-due to the occasional preference of Thai language users for correspondance
+due to the occasional preference of Thai language users for correspondence
 in rhyme. As an example, consider the following sentence%
 \footnote{The Thai adverbialising prefix \thai{อย่าง} can be likened
 to the English {}``-ly'' suffix, which produces an adverbial form
-from an adjective. Artificial word boundaries has beeen inserted for
-clarity.%
+from an adjective. Artificial word boundaries are inserted for clarity.%
 }:\\
 
 
 \begin{minipage}[t]{0.9\columnwidth}%
 \begin{flushleft}
-\thai{อังกฤษ คิดค้น อย่าง หนัก วัคซีนป้องกันเชื้อไวรัสไข้หวัดนก}
+\thai{อังกฤษ คิดค้น อย่าง หนัก วัคซีน ป้องกันเชื้อ ไวรัส ไข้หวัดนก}
 \par\end{flushleft}
 
-(\textbf{Lit}: England/NE invent/V {}``-ly''/ADVPFX heavy/ADJ avian\_flu\_vaccine/NP)
+(\textbf{Lit}: England/NE invent/V {}``-ly''/ADVPFX heavy/ADJ vaccine/N
+protect/V virus/N avian\_flu/NP)
 
 \begin{flushleft}
 {}``The British are strenuously developing an Avian Flu vaccine.''
@@ -127,33 +135,35 @@ but is in this sentence, it is realised in the pre-direct object position%
 aesthetically pleasing sound patterns, it results in a marked form,
 but the phenomenon is nonetheless productive, and encountered frequently
 enough to necessitate handling in NLP applications. %
-} in order for the last syllable of \thai{อย่าง หนัก}
-to rhyme with the first syllable of \thai{วัคซีน} ({}``vaccine'').
-To some degree, this phenomenon from spoken language shines through
-in written language, especially in the domains of news and recent
-politics, and is causing a challenge for the employment of CG grammar. 
+} in order for the last syllable {[} \emph{nak\textsuperscript{L}}{]}
+of \thai{อย่าง หนัก} to rhyme with the first syllable
+{[} \emph{wak\textsuperscript{H}}{]} of \thai{วัคซีน}
+({}``vaccine''). To some degree, this phenomenon from spoken language
+shines through in written language, especially in the domains of news
+and recent politics, and is causing a challenge for the employment
+of CG grammar. 
 
 \begin{figure*}
 \begin{centering}
 \includegraphics{dep_repr_ambiguity}
 \par\end{centering}
 
-\caption{Examplar of ambiguity arising only in dependency representation \citep{daum2004automatic}\label{fig:Examplar-of-ambiguity}}
+\caption{Example of ambiguity arising only in dependency representation \citep{daum2004automatic}\label{fig:Examplar-of-ambiguity}}
 \end{figure*}
 
 
 
 \subsection{Dependency representation}
 
-In recent years, dependency representation has seen a dramatic increase
-in interest, likely due to a number of appealing properties of the
-representation. In comparison to phrase structure grammar, dependency
-structures provide a relatively direct encoding of predicate-argument
-structure, which is relevant to subsequent analyses \citep{nivre2005dependency}.
-Dependency representation is arguably better suited for languages
-with flexible word order. Additionally, having no non-terminal nodes,
-dependency structures are often perceived as leaving room for less
-ambiguity as well as being more computationally managable.
+In recent years, dependency grammar has seen a dramatic increase in
+interest, likely due to a number of appealing properties of the representation.
+In comparison to phrase structure grammar, dependency structures provide
+a relatively direct encoding of predicate-argument structure, which
+is relevant to subsequent analyses \citep{nivre2005dependency}. Dependency
+representation is arguably better suited for languages with flexible
+word order. Additionally, having no non-terminal nodes, dependency
+structures are often perceived as leaving room for less ambiguity
+as well as being more computationally managable.
 
 Certainly, dependency representation has drawbacks of its own in terms
 of ambiguity, some of which are specific to dependency representation.
@@ -209,15 +219,15 @@ The rest of the paper is organised as follows. In Section \ref{sec:Related-work}
 we briefly review other works dealing with similar transformations,
 before presenting the approach taken in this work in Section \ref{sec:Methodology}.
 Section \ref{sec:Experiments} describes the experimental setting
-and results, which are discussed in Section \ref{sec:Discussion}.
-Finally, Section \ref{sec:Conclusion} concludes the paper. 
+and results. A discussion follows in Section \ref{sec:Discussion},
+and conclusions in Section \ref{sec:Conclusion} . 
 
 
 \section{Related work\label{sec:Related-work}}
 
 In preperation for the CoNLL-X shared task on dependency parsing \citep{buchholz2006conllxshared},
 a number dependency trees were derived from a number of constituency-based
-phrase structure treebanks, most of which has grammatical function
+phrase structure treebanks, most of which have grammatical function
 (e.g. {}``subject'' and {}``object'') as part of the annotation.
 The conversion process for such treebanks would involve a \emph{head
 table} with rules of the form 
@@ -230,7 +240,7 @@ biggest constituent of which this token is the lexical head''.
 The case of the Thai CG bank is different, as it does not directly
 contain any grammatical functions. On the other hand, identifying
 head tokens is relatively straight-forward when augmenting the CG
-annotation with dependency directions \citep{ruangrajitpakorn2010acurrent}. 
+annotation with dependency directions. 
 
 \citet{chanev2006dependency} faced a similar situation in their transformation
 of the BulTreeBank to dependency representation. Heads were first
@@ -268,8 +278,8 @@ shows a schematical overview of the proprosed method.
 
 \subsection{Terminology}
 
-For any given CG type $t$, we use thethe \emph{arity} (admittedly
-a bit sloppily) to denote the ordered list of arguments expected by
+For any given CG type $t$, we use the \emph{arity} (admittedly a
+bit sloppily) to denote the ordered list of arguments expected by
 a type. The arity of the type $\mathtt{s\backslash np/ws/np}$ is
 thus $\mathtt{/np}$, $\mathtt{/ws}$ and $\mathtt{\backslash np}$
 --- that is, 
@@ -300,11 +310,11 @@ rules:
 
 \subsection{Dependency directions}
 
-The first transformation step, which can rightly be regarded as a
-necessary preprocessing step before the actual transformation, involves
-a lexical dictionary for assigning dependency directions to the CG
-types associated with the grammatical entities in the CG bank, falling
-back on a generic CG to CDG mapping in case of unknown words. 
+The first transformation step, which can be regarded as a preprocessing
+step before the actual transformation, involves a lexical dictionary
+for assigning dependency directions to the CG types associated with
+the grammatical entities in the CG bank, falling back on a generic
+CG to CDG mapping in case of unknown words. 
 
 Note that only terminal nodes will have assigned dependency directions
 assigned by this procedure. Dependency directions are propagated to
@@ -336,9 +346,13 @@ nodes.\label{alg:propagating}}
 \subsection{Head finding}
 
 Dependency arcs are assigned by a procedure that implements the CDG
-dependency derivation rules introduced by \citet{ruangrajitpakorn2010acurrent}
-(motivated by \citealp{collins1999headdriven}). Let $c:d$ signify
-a CDG type $c$ and a dependency structure $d$, and the notion $h(\mathrm{d}_{1})\rightarrow h(\mathrm{d}_{2})$
+dependency derivation rules introduced by \citet{boonkwan2011grammar}
+(motivated by \citealp{collins1999headdriven}). The idea is to trace
+the derivation implied by the CG rules, registering the dependency
+relations specified by the CDG-augmentation along the way. 
+
+The derivation rules handled are as follows. Let $c:d$ signify a
+CDG type $c$ and a dependency structure $d$, and the notion $h(\mathrm{d}_{1})\rightarrow h(\mathrm{d}_{2})$
 represent a dependency arc between the head of $d_{1}$ and the head
 of $d_{2}$ (with $h(\mathrm{d}_{1})$ governing $h(\mathrm{d}_{2})$)
 . Then the derivation rules are:
@@ -350,6 +364,11 @@ of $d_{2}$ (with $h(\mathrm{d}_{1})$ governing $h(\mathrm{d}_{2})$)
 \textrm{Y:d}_{1}\;\;\textrm{X\textbackslash>Y:d}_{2} & \Rightarrow & h(\mathrm{d}_{1})\rightarrow h(\mathrm{d}_{2})
 \end{eqnarray*}
 
+
+In a simple example, \emph{Mary}{[}$\mathtt{np}${]} \emph{drinks}{[}$\mathtt{s\backslash<np/>np}${]}
+\emph{fresh}{[}$\mathtt{np/<np}${]} \emph{milk}{[}$\mathtt{np}${]},
+\emph{fresh} would combine with \emph{milk}, yielding an $\mathtt{np}$
+and a dependency arc specifying \emph{milk} as head of \emph{fresh.}
 
 In addition to the standard combinatory rules for forward and backward
 functional application above, the Thai CG bank makes use of a CCG-style
@@ -374,11 +393,11 @@ As an example, the verbs \thai{ตรวจ} ({}``examine'') and
 
 \begin{flushleft}
 (\textbf{Lit}: scientist/N examine/V find/V virus/N corona/N in/PP
-otter-civet/N)
+civet/N)
 \par\end{flushleft}
 
 \begin{flushleft}
-{}``The scientist examined the otter-civet and found coronavirus.''
+{}``The scientist examined the civet and found coronavirus.''
 \par\end{flushleft}
 
 \begin{flushleft}
@@ -484,12 +503,33 @@ is sufficient, having proper dependency labels is nonetheless desirable.
 In lack of an exact transformation, the approach explored in this
 work relies instead on training a classifier to predict the correct
 dependency label given local features of the tokens involved, as they
-occur in the dependency structure derived from the CDG tree. Two feature
-sets are suggested: The basic set comprising head and dependent CDG
-type, as well as dependency direction ({}``L'' or {}``R'', as
-seen from the dependent). The other set extends the basic set by including
-surface forms.
+occur in the dependency structure derived from the CDG tree. 
 
+From a related work (manuscript in preparation), we have obtained
+a number of CDG trees from labeled dependency trees. Such pairs of
+\emph{labeled} dependency trees and CDG trees can serve as training
+material for the label classifier.
+
+We evaluate different feature sets for classification task. The basic
+feature set contains:
+\begin{itemize}
+\item CDG type of token and its head
+\item \# of left siblings
+\item \# of right siblings
+\item Dependency direction (L/R)
+\item Concatenations of token/head CDG and \# of left siblings
+\end{itemize}
+Other feature sets extend the basic set including additional information:
+\begin{description}
+\item [{+forms}] Token and head word form.
+\item [{+POS(L)}] Part-of-speech tag for the token, as assigned by a learned
+part-of-speech tagger%
+\footnote{SVMTool \citep{gimenez2004svmtool}, trained on the Orchid corpus
+\citep{sornlertlamvanich1997orchidthai}.%
+}.
+\item [{+POS(G)}] {}``Gold'' part-of-speech tag as found in the labeled
+dependency tree.
+\end{description}
 \begin{figure}
 \subfloat[Subject (subj)]{\includegraphics[width=1\columnwidth]{deprels/subj}
 
@@ -510,18 +550,22 @@ as head CDG type and $\mathtt{np}$ as dependent CDG type. See Figure
 
 \section{Experiments\label{sec:Experiments}}
 
-The Thai CG bank made available for this research contains 1,428 CG
-trees, comprised of
+The Thai CG bank made available for this research contains 1,428 phrases
+with corresponding CG trees. Trees are mostly medium to low in token
+count, with 49 single-token trees, and the longest phrase having 9
+tokens. Median phrase length is 3 tokens. With a total token count
+of 5,143 tokens, the arithmetic mean length is 3.60. 
+
+As there is no explicit sentence boundary marker in Thai \citep{satayamas2004widecoverage},
+it is often unclear what constitutes a sentence. Thus, rather than
+ordinary sentences, the treebank contains phrases of different types,
+reflecting the partitioning of token sequences made by the treebank
+annotators for the purpose of treebanking:
 \begin{itemize}
 \item 539 verb phrases or subject-omitted phrases ($\mathtt{s\backslash np}$),
 \item 363 sentences ($\mathtt{s}$),
 \item 372 noun phrases ($\mathtt{np}$) and
-\item 4 prepositional phrases%
-\footnote{As there is no explicit sentence boundary marker in Thai \citep{satayamas2004widecoverage},
-it is often unclear what constitutes {}``a sentence''. The distribution
-of tree types reflect the partitioning of token sequences made by
-the treebank annotators for the purpose of treebanking.%
-} ($\mathtt{pp}$).
+\item 4 prepositional phrases ($\mathtt{pp}$).
 \end{itemize}
 The lexical dictionary used contains possible CDG types for 38.250
 word forms, with an average of 2 types listed per word form. For six
@@ -543,7 +587,7 @@ Word form(s) & CG type & Possible CDG equivalents & Interpretation\tabularnewlin
 \thai{ขณะนั้น} ({}``at that moment'') &  & \multirow{2}{*}{$\mathtt{s/<s}$} & \multirow{2}{*}{Adverb of time}\tabularnewline
 \thai{ขณะนี้} ({}``this moment'') &  &  & \tabularnewline
 \hline 
-\multirow{2}{*}{\thai{กับ}} & \multirow{2}{*}{$\mathtt{np\backslash<np/>np}$} & $\mathtt{np\backslash>np/>np}$ & Preposition {}``with''\tabularnewline
+\multirow{2}{*}{\thai{กับ}} & \multirow{2}{*}{$\mathtt{np\backslash np/np}$} & $\mathtt{np\backslash>np/>np}$ & Preposition {}``with''\tabularnewline
  &  & $\mathtt{np\backslash<np/>np}$ & Conjunction {}``and''\tabularnewline
 \hline 
 \end{tabular}
@@ -558,7 +602,7 @@ of the adverb \thai{ตอนนี้} ({}``at present'') is %
 \footnote{The Thai auxillary verb \thai{กำลัง} indicates the present
 participle, meaning \textquotedbl{}in the act of\textquotedbl{}, similar
 to the English suffix, \textquotedbl{}-ing\textquotedbl{}. Articifial
-word boundaries has been inserted for clarity.%
+word boundaries are inserted for clarity.%
 }:\\
 
 
@@ -620,66 +664,68 @@ direction\label{tab:map}}
 \end{table}
 
 
-
-\subsection{Dependency labeling }
-
-To evaluate the classification-based approach to assigning dependency
+In evaluating the classification-based approach to assigning dependency
 labels, a sample of 678 labeled dependency edges from the NAiST dependency
 treebank \citep{wacharamanotham2007thedevelopment} was used, along
-with corresponding CDG trees obtained from a related work (manuscript
-in preparation). The \emph{basic} and \emph{extended} feature sets
-desribed in section \vref{sub:Dependency-labeling} were evaluated
-with four different classifiers%
+with corresponding CDG trees. The feature sets suggested in section
+\vref{sub:Dependency-labeling} were evaluated with four different
+classifiers%
 \footnote{Experiments with the learners were done using leave-one-out cross-validation,
 with the exception of LibSVM, which was run using the standard K-fold
 cross-validation of the easy.py script \citep{chang2001libsvma}.%
 } (see Table \ref{tab:accuracy}).
 
-\begin{table}
-\centering{}%
-\begin{tabular}{|l|r@{\extracolsep{0pt}.}l|r@{\extracolsep{0pt}.}l|}
+\begin{table*}
+\begin{centering}
+\begin{tabular}{|l|r|r|r|r|r|r|}
 \hline 
-Classifier & \multicolumn{2}{c|}{Basic feats} & \multicolumn{2}{c|}{+forms}\tabularnewline
+ & \multirow{2}{*}{Basic} & \multirow{2}{*}{+forms} & \multirow{2}{*}{+POS(L)} & \multirow{2}{*}{+POS(G)} & +POS(L) & +POS(G)\tabularnewline
+Classifier &  &  &  &  & \& +forms & \& +forms\tabularnewline
 \hline 
 \hline 
-RandomForest-Weka & \multicolumn{2}{c|}{61.8\%} & \multicolumn{2}{c|}{69.5\%}\tabularnewline
+Random Forest & 61.9\% & 69.6\% & 66.1\% & 68.9\% & 72.9\% & 71.8\%\tabularnewline
 \hline 
-LibSVM & \multicolumn{2}{c|}{\textbf{62.8\%}} & \multicolumn{2}{c|}{\textbf{74.2\%}}\tabularnewline
+LibSVM & 64.3\% & 73.9\% & 66.1\% & 70.2\% & 74.5\% & \textbf{76.5\%}\tabularnewline
 \hline 
-NearestNeighbors & \multicolumn{2}{c|}{60.9\%} & \multicolumn{2}{c|}{68.0\%}\tabularnewline
+Nearest Neighbors & 60.5\% & 64.8\% & 62.4\% & 64.5\% & 70.5\% & 70.4\%\tabularnewline
 \hline 
-NaiveBayes & \multicolumn{2}{c|}{60.2\%} & \multicolumn{2}{c|}{60.2\%}\tabularnewline
+Naive Bayes & 60.6\% & 63.7\% & 61.7\% & 65.8\% & 63.7\% & 66.2\%\tabularnewline
 \hline 
-\end{tabular}\caption{Accuracy of different classifiers in recovering the correct dependency
-labels\label{tab:accuracy}}
-\end{table}
+\end{tabular}
+\par\end{centering}
+
+\centering{}\caption{Accuracy of different classifiers and feature sets in recovering the
+correct dependency labels \label{tab:accuracy}}
+\end{table*}
 
 
 
 \section{Discussion\label{sec:Discussion}}
 
-The process of transforming CDG-augmented CG trees to (unlabeled)
-dependency trees was (not surprisingly) successful. In this work,
-the issue of ambiguous CDG types affects only a very small number
-of trees, but remains an issue to be aware of. 
+Transforming CDG-augmented CG trees to unlabeled dependency trees
+was successful. In this work, the issue of ambiguous CDG types affects
+only a very small number of trees, but remains an issue to be aware
+of. 
 
-Dependency labels were not reliably recoverable by looking only at
-CDG types and dependency direction. However, by including head and
-dependent token surface forms as features for the classifier, a substantial
-reduction in error rate --- from 0.372 to 0.258 ($\approx31\%$) ---
-was gained. It seems hopeful that even better recovery of dependency
-labels can be obtained with this approach once more training material
-(in the form of sentences with both CDG and labeled dependency analyses)
-become available.
+For dependency labeling, only a small amount of training data (in
+the form of sentences with both CDG and labeled dependency analyses)
+was available for this prelimenary experiment. Using this, dependency
+labels were not reliably recoverable (76.5\% label accuracy). However,
+it seems hopeful that better recovery of dependency labels can be
+obtained with this approach once more training material become available. 
 
-Rather than the approximated classfier-based approach to labeling,
-one could consider settling for an exact but partial labeling by only
-assigning those dependency labels which unambigously arise from tuples
-of head and dependent CDG types. However, the dependency labels obtainable
-with absolute certainty in this way are often of the less interesting
-kind --- e.g. {}``conj'' for a $\mathtt{s\backslash<np}$ governed
-by a $\mathtt{s/>(s\backslash<np)}$ --- while the more useful labels
-remain ambiguous.
+Head and dependent word forms, as well as part-of-speech tags, were
+beneficial as added features for the label classifier, resulting in
+a substantial reduction in error rate --- from 0.357 to 0.235 ($\approx34\%$). 
+
+On the other hand, rather than the approximated classfier-based approach
+to labeling, one could consider settling for an exact but partial
+labeling by only assigning those dependency labels which unambigously
+arise from tuples of head and dependent CDG types. However, the dependency
+labels obtainable with absolute certainty in this way are often of
+the less interesting kind --- e.g. {}``conj'' for a $\mathtt{s\backslash<np}$
+governed by a $\mathtt{s/>(s\backslash<np)}$ --- while more useful
+labels remain ambiguous.
 
 \begin{figure}
 \begin{description}

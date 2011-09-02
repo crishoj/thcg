@@ -1,4 +1,4 @@
-﻿#LyX 2.0 created this file. For more info see http://www.lyx.org/
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
 \lyxformat 413
 \begin_document
 \begin_header
@@ -74,19 +74,232 @@ Automatic Transformation of the Thai Categorial Grammar Treebank to Dependency
 \end_layout
 
 \begin_layout Author
-Christian Rishøj
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{Christian Rishøj}
+\end_layout
+
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
-CST
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{CST}
+\end_layout
+
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
-University of Copenhagen
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{University of Copenhagen}
+\end_layout
+
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
-crjensen@hum.ku.dk
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{crjensen@hum.ku.dk}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+And
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{Taneth Ruangrajitpakorn}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{HLT Lab}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{NECTEC}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{taneth.rua@nectec.or.th}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+And
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{Prachya Boonkwan}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{HLT Lab}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{NECTEC}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{prachya.boo@nectec.or.th}
+\end_layout
+
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -103,22 +316,6 @@ And
 
 \end_inset
 
- Taneth Ruangrajitpakorn
-\begin_inset Newline newline
-\end_inset
-
-HLT Lab
-\begin_inset Newline newline
-\end_inset
-
-NECTEC
-\begin_inset Newline newline
-\end_inset
-
-taneth.rua@nectec.or.th
-\begin_inset Newline newline
-\end_inset
-
  
 \begin_inset ERT
 status open
@@ -127,24 +324,63 @@ status open
 
 
 \backslash
-And
+normalsize{Thepchai Supnithi}
 \end_layout
 
 \end_inset
 
- Thepchai Supnithi
+
 \begin_inset Newline newline
 \end_inset
 
-HLT Lab
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{HLT Lab}
+\end_layout
+
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
-NECTEC
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{NECTEC}
+\end_layout
+
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
-thepchai.sup@nectec.or.th
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+normalsize{thepchai.sup@nectec.or.th}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Abstract
@@ -176,8 +412,8 @@ Introduction
 
 \begin_layout Standard
 Syntactic resources play an essential role for the majority of NLP applications,
- but for Thai language, openly available syntactic resources are few in
- number: So far, the only reported resources are the CG treebank 
+ but for the Thai language, openly available syntactic resources are few
+ in number: So far, the only reported resources are the CG treebank 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ruangrajitpakorn2009asyntactic"
@@ -228,7 +464,7 @@ key "warotamasikkhadit1997fronting"
 \end_layout
 
 \begin_layout Standard
-Additionally, although Thai language belongs to a fixed word order typology,
+Additionally, although the Thai language belongs to a fixed word order typology,
  Thai spoken language exhibits some flexibility in word order, due to the
  occasional preference of Thai language users for correspondence in rhyme.
  As an example, consider the following sentence
@@ -856,14 +1092,7 @@ the head child of a VP/clause is the child with the HD/predicator/hd/Head
 The case of the Thai CG bank is different, as it does not directly contain
  any grammatical functions.
  On the other hand, identifying head tokens is relatively straight-forward
- when augmenting the CG annotation with dependency directions 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "ruangrajitpakorn2010acurrent"
-
-\end_inset
-
-.
+ when augmenting the CG annotation with dependency directions.
  
 \end_layout
 
@@ -1221,7 +1450,7 @@ Dependency arcs are assigned by a procedure that implements the CDG dependency
  derivation rules introduced by 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "ruangrajitpakorn2010acurrent"
+key "boonkwan2011grammar"
 
 \end_inset
 
