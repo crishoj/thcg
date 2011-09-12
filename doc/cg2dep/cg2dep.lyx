@@ -98,7 +98,7 @@ status open
 
 
 \backslash
-normalsize{CST}
+small{CST}
 \end_layout
 
 \end_inset
@@ -115,7 +115,7 @@ status open
 
 
 \backslash
-normalsize{University of Copenhagen}
+small{University of Copenhagen}
 \end_layout
 
 \end_inset
@@ -132,7 +132,7 @@ status open
 
 
 \backslash
-normalsize{crjensen@hum.ku.dk}
+small{crjensen@hum.ku.dk}
 \end_layout
 
 \end_inset
@@ -179,7 +179,7 @@ status open
 
 
 \backslash
-normalsize{HLT Lab}
+small{HLT Lab}
 \end_layout
 
 \end_inset
@@ -196,7 +196,7 @@ status open
 
 
 \backslash
-normalsize{NECTEC}
+small{NECTEC}
 \end_layout
 
 \end_inset
@@ -213,7 +213,7 @@ status open
 
 
 \backslash
-normalsize{taneth.rua@nectec.or.th}
+small{taneth.rua@nectec.or.th}
 \end_layout
 
 \end_inset
@@ -260,7 +260,7 @@ status open
 
 
 \backslash
-normalsize{HLT Lab}
+small{HLT Lab}
 \end_layout
 
 \end_inset
@@ -277,7 +277,7 @@ status open
 
 
 \backslash
-normalsize{NECTEC}
+small{NECTEC}
 \end_layout
 
 \end_inset
@@ -294,7 +294,7 @@ status open
 
 
 \backslash
-normalsize{prachya.boo@nectec.or.th}
+small{prachya.boo@nectec.or.th}
 \end_layout
 
 \end_inset
@@ -341,7 +341,7 @@ status open
 
 
 \backslash
-normalsize{HLT Lab}
+small{HLT Lab}
 \end_layout
 
 \end_inset
@@ -358,7 +358,7 @@ status open
 
 
 \backslash
-normalsize{NECTEC}
+small{NECTEC}
 \end_layout
 
 \end_inset
@@ -375,7 +375,7 @@ status open
 
 
 \backslash
-normalsize{thepchai.sup@nectec.or.th}
+small{thepchai.sup@nectec.or.th}
 \end_layout
 
 \end_inset
