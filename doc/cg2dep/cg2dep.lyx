@@ -391,7 +391,7 @@ A method for deriving an approximately labeled dependency treebank from
  falling back on a generic mapping of CG types in case of unknown words.
  Currently, all but a handful of the trees in the Thai CG bank can unambiguously
  be transformed into directed dependency trees.
- Dependency labels can optionally be assigned with a learned classfier,
+ Dependency labels can optionally be assigned with a learned classifier,
  which in a preliminary evaluation with a very small training set achieves
  
 \begin_inset Formula $76.5\%$
@@ -402,8 +402,8 @@ A method for deriving an approximately labeled dependency treebank from
  and corrected.
  Although rather limited in its coverage, excluding e.g.
  long-distance dependencies, topicalisations and longer sentences, the resulting
- treebank is believed to be sound in terms structural annotational consistence
- and a valuable complement to the scarce Thai language resources in existence.
+ treebank is believed to be sound in terms of structural annotational consistenc
+y and a valuable complement to the scarce Thai language resources in existence.
 \end_layout
 
 \begin_layout Section
@@ -451,8 +451,11 @@ key "steedman2000thesyntactic,ajdukiewicz1935diesyntaktische"
 
 , and forms the theoretical basis for the Thai CG treebank.
  The resource building effort has been very fruitful, but there remains
- phenomena of Thai languge, including long-distance dependencies and topicalisat
-ion 
+ phenomena of Thai 
+\lang british
+language
+\lang english
+, including long-distance dependencies and topicalisation 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "warotamasikkhadit1997fronting"
@@ -596,7 +599,11 @@ strenuously
 \end_inset
 
 ) conventionally occurs after the direct object, but is in this sentence,
- it is realised in the pre-direct object position
+ it is 
+\lang british
+realised
+\lang english
+ in the pre-direct object position
 \begin_inset Foot
 status open
 
@@ -743,7 +750,7 @@ key "nivre2005dependency"
  flexible word order.
  Additionally, having no non-terminal nodes, dependency structures are often
  perceived as leaving room for less ambiguity as well as being more computationa
-lly managable.
+lly manageable.
 \end_layout
 
 \begin_layout Standard
@@ -793,7 +800,7 @@ reference "fig:CCH"
 coordinating conjunction as dependent
 \emph default
  (CCD) of one of the conjuncts, thus allowing one conjunct to occur with
- a dependency label expliciting its grammatical function (Figure 
+ a dependency label denoting its grammatical function (Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:CCD"
@@ -952,7 +959,7 @@ name "fig:coord"
 \begin_layout Standard
 Nonetheless, given the availability of generally applicable, trainable dependenc
 y parsers, and reports of beneficial applications of dependency analysis
- in tasks such as word-alignmeent 
+ in tasks such as word-alignment 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "ma2008improving"
@@ -1030,7 +1037,7 @@ name "sec:Related-work"
 \end_layout
 
 \begin_layout Standard
-In preperation for the CoNLL-X shared task on dependency parsing 
+In preparation for the CoNLL-X shared task on dependency parsing 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "buchholz2006conllxshared"
@@ -1130,8 +1137,8 @@ name "sec:Methodology"
 
 \begin_layout Standard
 The situation with the Thai CG bank is a little different.
- Together with a set of combinatory grammer rules, the CG type tags and
- bracketing present in the treebank unambigously specify the constituent
+ Together with a set of combinatory grammar rules, the CG type tags and
+ bracketing present in the treebank unambiguously specify the constituent
  structure of the treebank sentences.
  When the CG type tags are augmented with dependency directions, a dependency
  tree can be derived with relative ease from the CG-based constituents.
@@ -1151,7 +1158,7 @@ reference "fig:Transformation-overview"
 
 \end_inset
 
- shows a schematical overview of the proprosed method.
+ shows a schematical overview of the proposed method.
 \end_layout
 
 \begin_layout Standard
@@ -1689,7 +1696,7 @@ find
 status open
 
 \begin_layout Plain Layout
-Articifial word boundaries inserted for clarity.
+Artificial word boundaries inserted for clarity.
 \end_layout
 
 \end_inset
@@ -2069,7 +2076,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-An unmistakekable labeling case: Given the CDG types of 
+An unmistakable labeling case: Given the CDG types of 
 \begin_inset Flex Thai
 status collapsed
 
